@@ -7,6 +7,8 @@ The library is designed to easily customized where each class has a single respo
 
 ## Installation
 
+NOT READY YET! STILL IN DEVELOPMENT
+
 `npm install sms-device`
 
 ## Usage
@@ -23,11 +25,18 @@ This library is using `gammu` to communicate with the modem. So first make sure 
     //Create a new instance with default implementation using gammu
     let smsDevice = SmsDevice.create();
 
-    smsDevice.setConfigFile('./phone1.rc');
-
     //This library is using Rxjs instead of Promise because 
     //it is more reliable so all the methods that run 
     //asynchronously will return an Observable
+
+    smsDevice.setConfigFile('./phone1.rc')
+        .subscribe(null, err =>{
+            console.log('Error probably file not exists, error:', error);
+        }, ()=>{
+            console.log('setConfigFile completed!');
+        });
+
+
 
     //To send an sms to a number
     smsDevice.sendSms('088121232', 'helooo world!')
