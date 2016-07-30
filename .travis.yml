@@ -12,4 +12,4 @@ install:
     - npm install -g mocha
     - npm install -g typings
     - typings install
-    
+    - npm install
