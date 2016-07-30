@@ -76,3 +76,11 @@ This library is using `gammu` to communicate with the modem. So first make sure 
 
 You can implement your own `IConfigBasedSmsDeviceManager, ISmsMetadataParser, and IIdentifyMetadataParser` if you decided to roll your own device manager. Once you have the implementation then you can assign them to an `SmsDevice` instance without ever changing the client code.
 
+
+## Contributions
+
+All contributions are welcome
+
+## License
+
+MIT
