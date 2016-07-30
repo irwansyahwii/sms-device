@@ -6,3 +6,7 @@ node_js:
     - "5.11"
     - "0.12"
     - "iojs"
+
+install:
+    - npm install -g typescript
+    - npm install -g mocha
