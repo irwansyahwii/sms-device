@@ -10,3 +10,6 @@ node_js:
 install:
     - npm install -g typescript
     - npm install -g mocha
+    - npm install -g typings
+    - typings install
+    
