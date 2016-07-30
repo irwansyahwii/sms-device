@@ -1,10 +1,10 @@
 {
   "name": "sms-device",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A library that provides an abstraction to send/receive sms through a modem. This library also provided an implementation that using gammu command line to communicate with the modem.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "tsc -p test && mocha test"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/irwansyahwii/sms-device/issues"
   },
-  "homepage": "https://github.com/irwansyahwii/sms-device#readme"
+  "homepage": "https://github.com/irwansyahwii/sms-device#readme",
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
 }
