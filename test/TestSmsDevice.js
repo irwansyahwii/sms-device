@@ -33,5 +33,41 @@ describe('SmsDevice', function () {
                 done();
             });
         });
+        it('stored the config file path when the file exists', function (done) {
+            let fileManager = {
+                isExists: function (filePath) {
+                    return Rx.Observable.create(s => {
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager);
+            smsDevice.setConfigFile('config1.rc')
+                .subscribe(null, err => {
+                chai_1.assert.fail(null, null, 'Must not reached here');
+            }, () => {
+                chai_1.assert.equal(smsDevice.getConfigFile(), 'config1.rc', 'Config file is incorrect');
+                done();
+            });
+        });
+        it('doesnt stored the config file path when the file exists', function (done) {
+            let fileManager = {
+                isExists: function (filePath) {
+                    return Rx.Observable.create(s => {
+                        s.next(false);
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager);
+            smsDevice.setConfigFile('config1.rc')
+                .subscribe(null, err => {
+                chai_1.assert.fail(null, null, 'Must not reached here');
+            }, () => {
+                chai_1.assert.equal(smsDevice.getConfigFile(), '', 'Config file is incorrect');
+                done();
+            });
+        });
     });
 });

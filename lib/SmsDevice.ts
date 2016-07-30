@@ -30,4 +30,8 @@ export class SmsDevice implements ISmsDevice{
             });
         });
     }
+
+    getConfigFile():string{
+        return this._configFilePath;
+    }
 }
