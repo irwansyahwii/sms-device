@@ -70,4 +70,24 @@ describe('SmsDevice', function () {
             });
         });
     });
+    describe('identify', function () {
+        it('checks if the config file has been set', function (done) {
+            let fileManager = {
+                isExists: function (filePath) {
+                    return Rx.Observable.create(s => {
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager);
+            smsDevice.identify()
+                .subscribe(null, err => {
+                chai_1.assert.equal(err.message, 'Identify failed. No config file specified.', 'Must not reached here');
+                done();
+            }, () => {
+                chai_1.assert.fail(null, null, 'Must not reached here');
+            });
+        });
+    });
 });
