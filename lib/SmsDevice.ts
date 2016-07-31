@@ -3,6 +3,8 @@ import {ISmsDevice} from './ISmsDevice';
 import {IFileManager} from './IFileManager';
 import {FileManager} from './FileManager';
 import {SmsDeviceInfo} from './SmsDeviceInfo';
+import {IModemDriver} from './IModemDriver';
+import {IIdentifyMetadataParser} from './IIdentifyMetadataParser';
 
 /**
  * Provide a default implementation for ISmsDevice
@@ -11,12 +13,13 @@ export class SmsDevice implements ISmsDevice{
 
     private _configFilePath:string = '';
 
-    constructor(private fileManager:IFileManager){
+    constructor(private fileManager:IFileManager, private modemDriver: IModemDriver, 
+        private identifyMetadataParser:IIdentifyMetadataParser){
 
     }
 
     static create():ISmsDevice{
-        return new SmsDevice(new FileManager());
+        return new SmsDevice(new FileManager(), null, null);
     }
 
     setConfigFile(configFilePath:string):Rx.Observable<void>{
@@ -27,6 +30,7 @@ export class SmsDevice implements ISmsDevice{
                 }
                 
                 s.next(r);
+                // s.next(['haloo']);
                 s.complete();
             });
         });
@@ -42,6 +46,22 @@ export class SmsDevice implements ISmsDevice{
                 s.error(new Error('Identify failed. No config file specified.'));
             }
             else{
+
+                
+
+                this.modemDriver.identify(this._configFilePath)
+                    .subscribe(identifyMetadata =>{
+                        this.identifyMetadataParser.parse(identifyMetadata)
+                            .subscribe(smsDeviceInfo =>{
+                                s.next(smsDeviceInfo);
+                            }, err =>{
+                                s.error(err);
+                            }, () =>{
+                                s.complete();
+                            });
+                    }, err =>{
+                        s.error(err);
+                    });    
             }            
         });
     }
