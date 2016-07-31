@@ -4,6 +4,7 @@
 const chai_1 = require('chai');
 const SmsDevice_1 = require('../lib/SmsDevice');
 const SmsDeviceInfo_1 = require('../lib/SmsDeviceInfo');
+const SmsInfo_1 = require('../lib/SmsInfo');
 const Rx = require('rxjs/Rx');
 describe('SmsDevice', function () {
     describe('create', function () {
@@ -25,7 +26,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err => {
                 chai_1.assert.fail(null, null, 'Must not reached here');
@@ -43,7 +44,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err => {
                 chai_1.assert.fail(null, null, 'Must not reached here');
@@ -61,7 +62,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err => {
                 chai_1.assert.fail(null, null, 'Must not reached here');
@@ -81,7 +82,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
             smsDevice.identify()
                 .subscribe(null, err => {
                 chai_1.assert.equal(err.message, 'Identify failed. No config file specified.', 'Must not reached here');
@@ -122,7 +123,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser, null);
             smsDevice.setConfigFile('config1.rc')
                 .concat(smsDevice.identify())
                 .subscribe(null, err => {
@@ -162,7 +163,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser, null);
             smsDevice.setConfigFile('config1.rc')
                 .concat(smsDevice.identify())
                 .skip(1)
@@ -186,7 +187,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
             smsDevice.readAllSms()
                 .subscribe(null, err => {
                 chai_1.assert.equal(err.message, 'readAllSms failed. No config file specified.', 'Must not reached here');
@@ -221,11 +222,66 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null);
+            let smsMetadataParser = {
+                parse(meta) {
+                    return Rx.Observable.create(s => {
+                        chai_1.assert.equal(meta, 'info1');
+                        s.next([new SmsInfo_1.SmsInfo()]);
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser);
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
                 smsDevice.readAllSms()
                     .subscribe(smsInfos => {
                     chai_1.assert.isTrue(isModemDriverReadAllSmsCalled);
+                    done();
+                }, err => {
+                    chai_1.assert.fail(null, null, 'Must not reached here');
+                }, () => {
+                });
+            });
+        });
+        it('calls ISmsMetadataParser.parse()', function (done) {
+            let fileManager = {
+                isExists: function (filePath) {
+                    return Rx.Observable.create(s => {
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            let isSmsMetadataParseCalled = false;
+            let modemDriver = {
+                identify: function (configFIle) {
+                    return Rx.Observable.create(s => {
+                        s.next('info1');
+                        s.complete();
+                    });
+                },
+                readAllSms: function (configFIle) {
+                    return Rx.Observable.create(s => {
+                        s.next('info1');
+                        s.complete();
+                    });
+                }
+            };
+            let smsMetadataParser = {
+                parse(meta) {
+                    return Rx.Observable.create(s => {
+                        chai_1.assert.equal(meta, 'info1');
+                        isSmsMetadataParseCalled = true;
+                        s.next([new SmsInfo_1.SmsInfo()]);
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser);
+            smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
+                smsDevice.readAllSms()
+                    .subscribe(smsInfos => {
+                    chai_1.assert.isTrue(isSmsMetadataParseCalled);
                     done();
                 }, err => {
                     chai_1.assert.fail(null, null, 'Must not reached here');

@@ -6,6 +6,7 @@ import {SmsDeviceInfo} from './SmsDeviceInfo';
 import {IModemDriver} from './IModemDriver';
 import {IIdentifyMetadataParser} from './IIdentifyMetadataParser';
 import {SmsInfo} from './SmsInfo';
+import {ISmsMetadataParser} from './ISmsMetadataParser';
 
 /**
  * Provide a default implementation for ISmsDevice
@@ -14,13 +15,15 @@ export class SmsDevice implements ISmsDevice{
 
     private _configFilePath:string = '';
 
-    constructor(private fileManager:IFileManager, private modemDriver: IModemDriver, 
-        private identifyMetadataParser:IIdentifyMetadataParser){
+    constructor(private fileManager:IFileManager, 
+        private modemDriver: IModemDriver, 
+        private identifyMetadataParser:IIdentifyMetadataParser,
+        private smsMetadataParser: ISmsMetadataParser ){
 
     }
 
     static create():ISmsDevice{
-        return new SmsDevice(new FileManager(), null, null);
+        return new SmsDevice(new FileManager(), null, null, null);
     }
 
     setConfigFile(configFilePath:string):Rx.Observable<void>{
@@ -31,8 +34,9 @@ export class SmsDevice implements ISmsDevice{
                 }
                 
                 s.next(r);
-                // s.next(['haloo']);
-                s.complete();
+                s.complete();   
+            }, err =>{
+                s.error(err);
             });
         });
     }
@@ -72,11 +76,17 @@ export class SmsDevice implements ISmsDevice{
             else{
                 this.modemDriver.readAllSms(this._configFilePath)
                     .subscribe(smsMetadata =>{
-                        s.next(smsMetadata);
+                        
+                        this.smsMetadataParser.parse(smsMetadata)
+                            .subscribe(smsInfos => {
+                                s.next(smsInfos);
+                            }, err =>{
+                                s.error(err);
+                            }, ()=>{
+                                s.complete();
+                            })    
                     }, err =>{
                         s.error(err);
-                    }, () =>{
-                        s.complete();
                     });
             }
         });

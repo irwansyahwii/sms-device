@@ -9,6 +9,7 @@ import {IModemDriver} from '../lib/IModemDriver';
 import {IIdentifyMetadataParser} from '../lib/IIdentifyMetadataParser';
 import {SmsDeviceInfo} from '../lib/SmsDeviceInfo';
 import {SmsInfo} from '../lib/SmsInfo';
+import {ISmsMetadataParser} from '../lib/ISmsMetadataParser';
 
 import Rx = require('rxjs/Rx');
 
@@ -35,7 +36,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err =>{
@@ -55,7 +56,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err =>{
@@ -75,7 +76,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err =>{
@@ -97,7 +98,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
 
             smsDevice.identify()
                 .subscribe(null, err =>{
@@ -147,7 +148,7 @@ describe('SmsDevice', function(){
             }
             
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, 
-                identifyMetadataParser);
+                identifyMetadataParser, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .concat(smsDevice.identify())
@@ -196,7 +197,7 @@ describe('SmsDevice', function(){
             
 
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, 
-                identifyMetadataParser);
+                identifyMetadataParser, null);
 
             
             smsDevice.setConfigFile('config1.rc')                
@@ -225,7 +226,7 @@ describe('SmsDevice', function(){
                 }
             };
             
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
 
             smsDevice.readAllSms()
                 .subscribe(null, err =>{
@@ -266,12 +267,83 @@ describe('SmsDevice', function(){
                 }
             }
             
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null);
+            let smsMetadataParser: ISmsMetadataParser = {
+                parse(meta:string):Rx.Observable<Array<SmsInfo>>{
+                    return Rx.Observable.create(s =>{
+
+                        assert.equal(meta, 'info1');
+
+                        s.next([new SmsInfo()]);
+                        s.complete();
+                    })
+                }
+            }
+            
+
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null, 
+                smsMetadataParser);
 
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
                 smsDevice.readAllSms()
                     .subscribe(smsInfos =>{
                         assert.isTrue(isModemDriverReadAllSmsCalled);
+                        done();
+                    }, err =>{
+                        assert.fail(null, null, 'Must not reached here');
+                    }, ()=>{
+                        
+                    });
+            })
+        });
+
+        it('calls ISmsMetadataParser.parse()', function(done){
+            let fileManager:IFileManager = {
+                isExists: function(filePath:string):Rx.Observable<boolean>{
+                    return Rx.Observable.create(s =>{
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+
+            let isSmsMetadataParseCalled = false;
+
+            let modemDriver: IModemDriver = {
+                identify: function(configFIle:string): Rx.Observable<string>{
+                    return Rx.Observable.create(s =>{
+                        s.next('info1');
+                        s.complete();
+                    })
+                },
+                readAllSms: function(configFIle:string): Rx.Observable<string>{
+                    return Rx.Observable.create(s =>{
+                        s.next('info1');
+                        s.complete();
+                    })
+                }
+            }
+
+            let smsMetadataParser: ISmsMetadataParser = {
+                parse(meta:string):Rx.Observable<Array<SmsInfo>>{
+                    return Rx.Observable.create(s =>{
+
+                        assert.equal(meta, 'info1');
+
+                        isSmsMetadataParseCalled = true;
+
+                        s.next([new SmsInfo()]);
+                        s.complete();
+                    })
+                }
+            }
+            
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null,
+                smsMetadataParser);
+
+            smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
+                smsDevice.readAllSms()
+                    .subscribe(smsInfos =>{
+                        assert.isTrue(isSmsMetadataParseCalled);
                         done();
                     }, err =>{
                         assert.fail(null, null, 'Must not reached here');
