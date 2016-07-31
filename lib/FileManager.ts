@@ -6,6 +6,9 @@ declare let require:any;
 
 const fs = require('fs');
 
+/**
+ * Provide IFileManager implementation using fs.stat()
+ */
 export class FileManager implements IFileManager {
     constructor(){
 

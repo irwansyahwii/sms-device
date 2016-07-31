@@ -71,7 +71,7 @@ describe('SmsDevice', function () {
             });
         });
     });
-    describe('identify', function () {
+    describe('identify()', function () {
         it('checks if the config file has been set', function (done) {
             let fileManager = {
                 isExists: function (filePath) {
@@ -108,6 +108,9 @@ describe('SmsDevice', function () {
                         s.next('info1');
                         s.complete();
                     });
+                },
+                readAllSms(cf) {
+                    return null;
                 }
             };
             let identifyMetadataParser = {
@@ -145,6 +148,9 @@ describe('SmsDevice', function () {
                         s.next('info1');
                         s.complete();
                     });
+                },
+                readAllSms(cf) {
+                    return null;
                 }
             };
             let identifyMetadataParser = {
@@ -167,6 +173,64 @@ describe('SmsDevice', function () {
             }, err => {
                 chai_1.assert.fail(null, null, 'Must not reached here');
             }, () => {
+            });
+        });
+    });
+    describe('readAllSms()', function () {
+        it('checks if the config file has been set', function (done) {
+            let fileManager = {
+                isExists: function (filePath) {
+                    return Rx.Observable.create(s => {
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null);
+            smsDevice.readAllSms()
+                .subscribe(null, err => {
+                chai_1.assert.equal(err.message, 'readAllSms failed. No config file specified.', 'Must not reached here');
+                done();
+            }, () => {
+                chai_1.assert.fail(null, null, 'Must not reached here');
+            });
+        });
+        it('calls IModemDriver.readAllSms()', function (done) {
+            let fileManager = {
+                isExists: function (filePath) {
+                    return Rx.Observable.create(s => {
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            let isModemDriverReadAllSmsCalled = false;
+            let modemDriver = {
+                identify: function (configFIle) {
+                    return Rx.Observable.create(s => {
+                        s.next('info1');
+                        s.complete();
+                    });
+                },
+                readAllSms: function (configFIle) {
+                    return Rx.Observable.create(s => {
+                        chai_1.assert.equal(configFIle, 'config1.rc');
+                        isModemDriverReadAllSmsCalled = true;
+                        s.next('info1');
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null);
+            smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
+                smsDevice.readAllSms()
+                    .subscribe(smsInfos => {
+                    chai_1.assert.isTrue(isModemDriverReadAllSmsCalled);
+                    done();
+                }, err => {
+                    chai_1.assert.fail(null, null, 'Must not reached here');
+                }, () => {
+                });
             });
         });
     });

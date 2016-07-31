@@ -1,5 +1,6 @@
 import Rx = require('rxjs/Rx');
 import {SmsDeviceInfo} from './SmsDeviceInfo';
+import {SmsInfo} from './SmsInfo';
 
 /**
  * Defined a set of operations for an Sms device.
@@ -20,7 +21,14 @@ export interface ISmsDevice{
     /**
      * Identify the SIM card specified by the config file
      * 
-     * @return 
+     * @return {Rx.Observable<SmsDeviceInfo>} - An Observable containing an SmsDeviceInfo
      */
     identify():Rx.Observable<SmsDeviceInfo>;    
+
+    /**
+     * Read all sms in a SIM card
+     * 
+     * @return {Rx.Observable<Array<SmsInfo>>} - An Observable containing an array of SmsInfo
+     */
+    readAllSms():Rx.Observable<Array<SmsInfo>>;
 }

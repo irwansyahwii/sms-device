@@ -8,6 +8,7 @@ import {IFileManager} from '../lib/IFileManager';
 import {IModemDriver} from '../lib/IModemDriver';
 import {IIdentifyMetadataParser} from '../lib/IIdentifyMetadataParser';
 import {SmsDeviceInfo} from '../lib/SmsDeviceInfo';
+import {SmsInfo} from '../lib/SmsInfo';
 
 import Rx = require('rxjs/Rx');
 
@@ -86,7 +87,7 @@ describe('SmsDevice', function(){
         })
     });
 
-    describe('identify', function(){
+    describe('identify()', function(){
         it('checks if the config file has been set', function(done){
             let fileManager:IFileManager = {
                 isExists: function(filePath:string):Rx.Observable<boolean>{
@@ -128,7 +129,10 @@ describe('SmsDevice', function(){
                         s.next('info1');
                         s.complete();
                     })
-                }
+                },
+                readAllSms(cf:string):Rx.Observable<string>{
+                    return null;
+                }                
             }
 
             let identifyMetadataParser:IIdentifyMetadataParser = {
@@ -173,6 +177,9 @@ describe('SmsDevice', function(){
                         s.next('info1');
                         s.complete();
                     })
+                },
+                readAllSms(cf:string):Rx.Observable<string>{
+                    return null;
                 }
             }
 
@@ -204,7 +211,75 @@ describe('SmsDevice', function(){
                 }, () =>{
                     
                 });
-        });        
+        });
+    });
+
+    describe('readAllSms()', function(){
+        it('checks if the config file has been set', function(done){
+            let fileManager:IFileManager = {
+                isExists: function(filePath:string):Rx.Observable<boolean>{
+                    return Rx.Observable.create(s =>{
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null);
+
+            smsDevice.readAllSms()
+                .subscribe(null, err =>{
+                    assert.equal(err.message, 'readAllSms failed. No config file specified.', 'Must not reached here');
+                    done();
+                }, ()=>{
+                    assert.fail(null, null, 'Must not reached here');
+                });                    
+        });
+
+        it('calls IModemDriver.readAllSms()', function(done){
+            let fileManager:IFileManager = {
+                isExists: function(filePath:string):Rx.Observable<boolean>{
+                    return Rx.Observable.create(s =>{
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+
+            let isModemDriverReadAllSmsCalled = false;
+
+            let modemDriver: IModemDriver = {
+                identify: function(configFIle:string): Rx.Observable<string>{
+                    return Rx.Observable.create(s =>{
+                        s.next('info1');
+                        s.complete();
+                    })
+                },
+                readAllSms: function(configFIle:string): Rx.Observable<string>{
+                    return Rx.Observable.create(s =>{
+                        assert.equal(configFIle, 'config1.rc');
+
+                        isModemDriverReadAllSmsCalled = true;
+                        s.next('info1');
+                        s.complete();
+                    })
+                }
+            }
+            
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null);
+
+            smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
+                smsDevice.readAllSms()
+                    .subscribe(smsInfos =>{
+                        assert.isTrue(isModemDriverReadAllSmsCalled);
+                        done();
+                    }, err =>{
+                        assert.fail(null, null, 'Must not reached here');
+                    }, ()=>{
+                        
+                    });
+            })
+        });
     });
 
 });

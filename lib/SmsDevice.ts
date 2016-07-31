@@ -5,6 +5,7 @@ import {FileManager} from './FileManager';
 import {SmsDeviceInfo} from './SmsDeviceInfo';
 import {IModemDriver} from './IModemDriver';
 import {IIdentifyMetadataParser} from './IIdentifyMetadataParser';
+import {SmsInfo} from './SmsInfo';
 
 /**
  * Provide a default implementation for ISmsDevice
@@ -46,9 +47,6 @@ export class SmsDevice implements ISmsDevice{
                 s.error(new Error('Identify failed. No config file specified.'));
             }
             else{
-
-                
-
                 this.modemDriver.identify(this._configFilePath)
                     .subscribe(identifyMetadata =>{
                         this.identifyMetadataParser.parse(identifyMetadata)
@@ -63,6 +61,24 @@ export class SmsDevice implements ISmsDevice{
                         s.error(err);
                     });    
             }            
+        });
+    }
+
+    readAllSms():Rx.Observable<Array<SmsInfo>>{
+        return Rx.Observable.create(s => {
+            if(this._configFilePath.length <= 0){
+                s.error(new Error('readAllSms failed. No config file specified.'));
+            }
+            else{
+                this.modemDriver.readAllSms(this._configFilePath)
+                    .subscribe(smsMetadata =>{
+                        s.next(smsMetadata);
+                    }, err =>{
+                        s.error(err);
+                    }, () =>{
+                        s.complete();
+                    });
+            }
         });
     }
 }
