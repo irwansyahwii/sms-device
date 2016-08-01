@@ -5,14 +5,14 @@ import Rx = require('rxjs/Rx');
  */
 export interface IModemDriver{
     /**
-     * Send identify command to the modem
+     * Sends an identify command to the modem
      * 
      * @return {string} The identify metadata from the modem
      */
     identify(configFile:string): Rx.Observable<string>;
 
     /**
-     * Send read all sms command to the modem
+     * Sends a read all sms command to the modem
      * 
      * @param {string} configFile - The config file path for the modem
      * 
@@ -21,7 +21,7 @@ export interface IModemDriver{
     readAllSms(configFile:string): Rx.Observable<string>;
 
     /**
-     * Send delete all sms command to the modem
+     * Sends a delete all sms command to the modem
      * 
      * @param {string} configFile - The config file path for the the modem
      * @param {number} startLocation - The start location of the sms
@@ -30,4 +30,13 @@ export interface IModemDriver{
      * @return {Rx.Observable} An Observable
      */
     deleteAllSms(configFile:string, startLocation:number, endLocation:number):Rx.Observable<void>;
+
+    /**
+     * Sends a send sms command to the modem
+     * 
+     * @param {string} configFile - The config file path for the the modem
+     * @param {string} destinationPhone - The destination phone number
+     * @param {string} message - The sms message
+     */
+    sendSms(configFile:string, destinationPhone:string, message: string): Rx.Observable<void>;
 }

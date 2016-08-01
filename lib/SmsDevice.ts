@@ -111,6 +111,14 @@ export class SmsDevice implements ISmsDevice{
                 s.error(new Error('sendSms failed. No config file specified.'));
             }
             else{
+                this.modemDriver.sendSms(this._configFilePath, destinationPhone, message)
+                    .subscribe(r => {
+                        s.next();
+                    }, err =>{
+                        s.error(err);
+                    }, ()=>{
+                        s.complete();
+                    })
             }            
         })
     }

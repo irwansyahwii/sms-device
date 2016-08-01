@@ -118,6 +118,12 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                sendSms(configFIle, destinationPhone, message) {
+                    return Rx.Observable.create(s => {
+                        s.next();
+                        s.complete();
+                    });
                 }
             };
             let identifyMetadataParser = {
@@ -160,6 +166,12 @@ describe('SmsDevice', function () {
                     return null;
                 },
                 deleteAllSms: function (configFIle, startLocation, endLocation) {
+                    return Rx.Observable.create(s => {
+                        s.next();
+                        s.complete();
+                    });
+                },
+                sendSms(configFIle, destinationPhone, message) {
                     return Rx.Observable.create(s => {
                         s.next();
                         s.complete();
@@ -238,6 +250,12 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                sendSms(configFIle, destinationPhone, message) {
+                    return Rx.Observable.create(s => {
+                        s.next();
+                        s.complete();
+                    });
                 }
             };
             let smsMetadataParser = {
@@ -285,6 +303,12 @@ describe('SmsDevice', function () {
                     });
                 },
                 deleteAllSms: function (configFIle, startLocation, endLocation) {
+                    return Rx.Observable.create(s => {
+                        s.next();
+                        s.complete();
+                    });
+                },
+                sendSms(configFIle, destinationPhone, message) {
                     return Rx.Observable.create(s => {
                         s.next();
                         s.complete();
@@ -365,6 +389,12 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                sendSms(configFIle, destinationPhone, message) {
+                    return Rx.Observable.create(s => {
+                        s.next();
+                        s.complete();
+                    });
                 }
             };
             let smsMetadataParser = {
@@ -406,6 +436,66 @@ describe('SmsDevice', function () {
                 done();
             }, () => {
                 chai_1.assert.fail(null, null, 'Must not reached here');
+            });
+        });
+        it('calls IModemDriver.sendSms()', function (done) {
+            let fileManager = {
+                isExists: function (filePath) {
+                    return Rx.Observable.create(s => {
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            let isModemDriverSendSmsCalled = false;
+            let modemDriver = {
+                identify: function (configFIle) {
+                    return Rx.Observable.create(s => {
+                        s.next('info1');
+                        s.complete();
+                    });
+                },
+                readAllSms: function (configFIle) {
+                    return Rx.Observable.create(s => {
+                        s.next('info1');
+                        s.complete();
+                    });
+                },
+                deleteAllSms: function (configFIle, startLocation, endLocation) {
+                    return Rx.Observable.create(s => {
+                        s.next();
+                        s.complete();
+                    });
+                },
+                sendSms(configFIle, destinationPhone, message) {
+                    return Rx.Observable.create(s => {
+                        chai_1.assert.equal(configFIle, 'config1.rc');
+                        chai_1.assert.equal(destinationPhone, '012345678');
+                        chai_1.assert.equal(message, 'heloo!');
+                        isModemDriverSendSmsCalled = true;
+                        s.next();
+                        s.complete();
+                    });
+                }
+            };
+            let smsMetadataParser = {
+                parse(meta) {
+                    return Rx.Observable.create(s => {
+                        s.next([new SmsInfo_1.SmsInfo()]);
+                        s.complete();
+                    });
+                }
+            };
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser);
+            smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
+                smsDevice.sendSms('012345678', 'heloo!')
+                    .subscribe(smsInfos => {
+                    chai_1.assert.isTrue(isModemDriverSendSmsCalled);
+                    done();
+                }, err => {
+                    chai_1.assert.fail(null, null, 'Must not reached here');
+                }, () => {
+                });
             });
         });
     });
