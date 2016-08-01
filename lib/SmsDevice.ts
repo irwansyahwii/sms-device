@@ -52,17 +52,15 @@ export class SmsDevice implements ISmsDevice{
             }
             else{
                 this.modemDriver.identify(this._configFilePath)
-                    .subscribe(identifyMetadata =>{
-                        this.identifyMetadataParser.parse(identifyMetadata)
-                            .subscribe(smsDeviceInfo =>{
-                                s.next(smsDeviceInfo);
-                            }, err =>{
-                                s.error(err);
-                            }, () =>{
-                                s.complete();
-                            });
+                    .flatMap(identifyMetadata => {
+                        return this.identifyMetadataParser.parse(identifyMetadata);
+                    })
+                    .subscribe(smsDeviceInfo =>{
+                        s.next(smsDeviceInfo);
                     }, err =>{
                         s.error(err);
+                    }, () =>{
+                        s.complete();
                     });    
             }            
         });
@@ -75,18 +73,15 @@ export class SmsDevice implements ISmsDevice{
             }
             else{
                 this.modemDriver.readAllSms(this._configFilePath)
-                    .subscribe(smsMetadata =>{
-                        
-                        this.smsMetadataParser.parse(smsMetadata)
-                            .subscribe(smsInfos => {
-                                s.next(smsInfos);
-                            }, err =>{
-                                s.error(err);
-                            }, ()=>{
-                                s.complete();
-                            })    
+                    .flatMap(smsMetadata => {
+                        return this.smsMetadataParser.parse(smsMetadata);
+                    })
+                    .subscribe(smsInfos =>{
+                        s.next(smsInfos);
                     }, err =>{
                         s.error(err);
+                    }, () =>{
+                        s.complete();
                     });
             }
         });
