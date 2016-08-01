@@ -20,6 +20,12 @@ describe('SmsDevice', function(){
 
             assert.isNotNull(smsDevice);
 
+            let smsDeviceInternal:any = smsDevice;
+
+            assert.isNotNull(smsDeviceInternal.fileManager);
+            assert.isNotNull(smsDeviceInternal.identifyMetadataParser);
+            assert.isNotNull(smsDeviceInternal.smsMetadataParser);
+
             done();
         });
     });

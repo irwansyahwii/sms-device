@@ -7,6 +7,9 @@ import {IModemDriver} from './IModemDriver';
 import {IIdentifyMetadataParser} from './IIdentifyMetadataParser';
 import {SmsInfo} from './SmsInfo';
 import {ISmsMetadataParser} from './ISmsMetadataParser';
+import {GammuSmsMetadataParser} from './gammu/GammuSmsMetadataParser';
+import {GammuIdentifyMetadataParser} from './gammu/GammuIdentifyMetadataParser';
+import {GammuModemDriver} from './gammu/GammuModemDriver';
 
 /**
  * Provide a default implementation for ISmsDevice
@@ -23,7 +26,9 @@ export class SmsDevice implements ISmsDevice{
     }
 
     static create():ISmsDevice{
-        return new SmsDevice(new FileManager(), null, null, null);
+        return new SmsDevice(new FileManager(), new GammuModemDriver()
+            , new GammuIdentifyMetadataParser()
+            , new GammuSmsMetadataParser());
     }
 
     setConfigFile(configFilePath:string):Rx.Observable<void>{

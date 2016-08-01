@@ -11,6 +11,10 @@ describe('SmsDevice', function () {
         it('create a new instance of ISmsDevice with default device implementations', function (done) {
             let smsDevice = SmsDevice_1.SmsDevice.create();
             chai_1.assert.isNotNull(smsDevice);
+            let smsDeviceInternal = smsDevice;
+            chai_1.assert.isNotNull(smsDeviceInternal.fileManager);
+            chai_1.assert.isNotNull(smsDeviceInternal.identifyMetadataParser);
+            chai_1.assert.isNotNull(smsDeviceInternal.smsMetadataParser);
             done();
         });
     });
