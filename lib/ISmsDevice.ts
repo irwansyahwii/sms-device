@@ -38,4 +38,11 @@ export interface ISmsDevice{
      * @return {Rx.Observable<void>} - An Observable
      */
     deleteAllSms(startLocation: number, endLocation: number):Rx.Observable<void>;
+
+    /**
+     * Send an sms to a phone number
+     * 
+     * @return {Rx.Observable<void>} An Observable
+     */
+    sendSms(destinationPhone:string, message:string):Rx.Observable<void>;
 }

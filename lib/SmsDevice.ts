@@ -104,4 +104,14 @@ export class SmsDevice implements ISmsDevice{
             }
         });
     }
+
+    sendSms(destinationPhone:string, message:string):Rx.Observable<void>{
+        return Rx.Observable.create(s => {
+            if(this._configFilePath.length <= 0){
+                s.error(new Error('sendSms failed. No config file specified.'));
+            }
+            else{
+            }            
+        })
+    }
 }

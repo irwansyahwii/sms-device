@@ -466,8 +466,30 @@ describe('SmsDevice', function(){
                         
                     });
             })
+        });        
+    });
+
+    describe('sendSms', function(){
+        it('checks if the config file has been set', function(done){
+            let fileManager:IFileManager = {
+                isExists: function(filePath:string):Rx.Observable<boolean>{
+                    return Rx.Observable.create(s =>{
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+
+            smsDevice.sendSms('08912812', 'helooo')
+                .subscribe(null, err =>{
+                    assert.equal(err.message, 'sendSms failed. No config file specified.', 'Error message is incorrect');
+                    done();
+                }, ()=>{
+                    assert.fail(null, null, 'Must not reached here');
+                });
         });
-        
     });
 
 });
