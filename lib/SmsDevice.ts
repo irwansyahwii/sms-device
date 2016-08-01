@@ -86,4 +86,22 @@ export class SmsDevice implements ISmsDevice{
             }
         });
     }
+    deleteAllSms(startLocation: number, endLocation: number):Rx.Observable<void>{
+        return Rx.Observable.create(s =>{
+            if(this._configFilePath.length <= 0){
+                s.error(new Error('deleteAllSms failed. No config file specified.'));
+            }
+            else{
+                this.modemDriver.deleteAllSms(this._configFilePath, startLocation, endLocation)
+                    .subscribe(r =>{
+                        s.next();
+                    }, err => {
+                        s.error(err)
+                    }, 
+                    ()=>{
+                        s.complete();
+                    })
+            }
+        });
+    }
 }

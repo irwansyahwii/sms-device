@@ -31,4 +31,11 @@ export interface ISmsDevice{
      * @return {Rx.Observable<Array<SmsInfo>>} - An Observable containing an array of SmsInfo
      */
     readAllSms():Rx.Observable<Array<SmsInfo>>;
+
+    /**
+     * Delete all sms in a SIM card starting from a location to an end location
+     * 
+     * @return {Rx.Observable<void>} - An Observable
+     */
+    deleteAllSms(startLocation: number, endLocation: number):Rx.Observable<void>;
 }

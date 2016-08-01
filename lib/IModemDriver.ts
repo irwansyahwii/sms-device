@@ -14,9 +14,20 @@ export interface IModemDriver{
     /**
      * Send read all sms command to the modem
      * 
-     * @param {string} configFile - The confg file path for the modem
+     * @param {string} configFile - The config file path for the modem
      * 
      * @return {Rx.Observable<string>} An Observable containing the sms metada from the modem
      */
-    readAllSms(configFIle:string): Rx.Observable<string>;
+    readAllSms(configFile:string): Rx.Observable<string>;
+
+    /**
+     * Send delete all sms command to the modem
+     * 
+     * @param {string} configFile - The config file path for the the modem
+     * @param {number} startLocation - The start location of the sms
+     * @param {number} endLocation - The end location of the sms
+     * 
+     * @return {Rx.Observable} An Observable
+     */
+    deleteAllSms(configFile:string, startLocation:number, endLocation:number):Rx.Observable<void>;
 }

@@ -133,7 +133,13 @@ describe('SmsDevice', function(){
                 },
                 readAllSms(cf:string):Rx.Observable<string>{
                     return null;
-                }                
+                },
+                deleteAllSms: function(configFIle:string, startLocation:number, endLocation:number): Rx.Observable<void>{
+                    return Rx.Observable.create(s =>{
+                        s.next();
+                        s.complete();
+                    })                    
+                }                                
             }
 
             let identifyMetadataParser:IIdentifyMetadataParser = {
@@ -181,7 +187,13 @@ describe('SmsDevice', function(){
                 },
                 readAllSms(cf:string):Rx.Observable<string>{
                     return null;
-                }
+                },
+                deleteAllSms: function(configFIle:string, startLocation:number, endLocation:number): Rx.Observable<void>{
+                    return Rx.Observable.create(s =>{
+                        s.next();
+                        s.complete();
+                    })                    
+                }                                
             }
 
             let identifyMetadataParser:IIdentifyMetadataParser = {
@@ -264,7 +276,13 @@ describe('SmsDevice', function(){
                         s.next('info1');
                         s.complete();
                     })
-                }
+                },
+                deleteAllSms: function(configFIle:string, startLocation:number, endLocation:number): Rx.Observable<void>{
+                    return Rx.Observable.create(s =>{
+                        s.next();
+                        s.complete();
+                    })                    
+                }                                
             }
             
             let smsMetadataParser: ISmsMetadataParser = {
@@ -320,7 +338,13 @@ describe('SmsDevice', function(){
                         s.next('info1');
                         s.complete();
                     })
-                }
+                },
+                deleteAllSms: function(configFIle:string, startLocation:number, endLocation:number): Rx.Observable<void>{
+                    return Rx.Observable.create(s =>{
+                        s.next();
+                        s.complete();
+                    })                    
+                }                
             }
 
             let smsMetadataParser: ISmsMetadataParser = {
@@ -352,6 +376,98 @@ describe('SmsDevice', function(){
                     });
             })
         });
+    });
+
+    describe('deleteAllSms', function(){
+        it('checks if the config file has been set', function(done){
+            let fileManager:IFileManager = {
+                isExists: function(filePath:string):Rx.Observable<boolean>{
+                    return Rx.Observable.create(s =>{
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+            
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+
+            smsDevice.deleteAllSms(1, 3)
+                .subscribe(null, err =>{
+                    assert.equal(err.message, 'deleteAllSms failed. No config file specified.', 'Must not reached here');
+                    done();
+                }, ()=>{
+                    assert.fail(null, null, 'Must not reached here');
+                });
+        });
+
+        it('calls IModemDriver.deleteAllSms()', function(done){
+            let fileManager:IFileManager = {
+                isExists: function(filePath:string):Rx.Observable<boolean>{
+                    return Rx.Observable.create(s =>{
+                        s.next(true);
+                        s.complete();
+                    });
+                }
+            };
+
+            let isModemDriverDeleteAllSmsCalled = false;
+
+            let modemDriver: IModemDriver = {
+                identify: function(configFIle:string): Rx.Observable<string>{
+                    return Rx.Observable.create(s =>{
+                        s.next('info1');
+                        s.complete();
+                    })
+                },
+                readAllSms: function(configFIle:string): Rx.Observable<string>{
+                    return Rx.Observable.create(s =>{
+                        s.next('info1');
+                        s.complete();
+                    })
+                },
+                deleteAllSms: function(configFIle:string, startLocation:number, endLocation:number): Rx.Observable<void>{
+                    return Rx.Observable.create(s =>{
+                        isModemDriverDeleteAllSmsCalled = true;
+
+                        assert.equal(configFIle, 'config1.rc');
+                        assert.equal(startLocation, 1);
+                        assert.equal(endLocation, 3);
+
+                        s.next();
+                        s.complete();
+                    })                    
+                }
+            }
+            
+            let smsMetadataParser: ISmsMetadataParser = {
+                parse(meta:string):Rx.Observable<Array<SmsInfo>>{
+                    return Rx.Observable.create(s =>{
+
+                        assert.equal(meta, 'info1');
+
+                        s.next([new SmsInfo()]);
+                        s.complete();
+                    })
+                }
+            }
+            
+
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null, 
+                smsMetadataParser);
+
+            smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
+                smsDevice.deleteAllSms(1, 3)
+                    .subscribe(smsInfos =>{
+                        assert.isTrue(isModemDriverDeleteAllSmsCalled);
+                        done();
+                    }, err =>{
+                        assert.fail(null, null, 'Must not reached here');
+                    }, ()=>{
+                        
+                    });
+            })
+        });
+        
     });
 
 });
