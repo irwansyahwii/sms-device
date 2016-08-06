@@ -86,7 +86,8 @@ describe('SmsDevice', function(){
 
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err =>{
-                    assert.fail(null, null, 'Must not reached here');
+                    assert.equal(err.message, 'Config file not found: config1.rc');
+                    done();
                 }, ()=>{
                     assert.equal(smsDevice.getConfigFile(), '', 'Config file is incorrect');
                     done();

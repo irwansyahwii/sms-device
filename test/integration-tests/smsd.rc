@@ -1,0 +1,26 @@
+[gammu]
+port = /dev/ttyUSB1
+connection = at115200
+# Debugging
+logformat = textall
+
+
+# SMSD configuration, see gammu-smsdrc(5)
+[smsd]
+service = sql
+driver = native_mysql
+logfile = /var/log/gammu-smsd1
+user = root
+password = 010679
+pc = localhost
+database = gammu
+maxretries = 10
+loopsleep = 0.2
+# Increase for debugging information
+debuglevel = 1
+PhoneID = phone1
+CommTimeOut = 5
+SendTimeOut = 5
+ReceiveFrequency = 5
+CheckBattery = 0
+CheckSecurity = 0

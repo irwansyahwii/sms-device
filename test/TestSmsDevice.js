@@ -69,7 +69,8 @@ describe('SmsDevice', function () {
             let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err => {
-                chai_1.assert.fail(null, null, 'Must not reached here');
+                chai_1.assert.equal(err.message, 'Config file not found: config1.rc');
+                done();
             }, () => {
                 chai_1.assert.equal(smsDevice.getConfigFile(), '', 'Config file is incorrect');
                 done();

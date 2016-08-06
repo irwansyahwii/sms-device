@@ -78,9 +78,11 @@ export class GammuModemDriver implements IModemDriver{
             gammu.stderr.on('data', data =>{
                 let message:string = data.toString().trim();
 
+                
+
                 if(message.startsWith("If you want break")
                     || message.startsWith("Sending SMS")){
-                        s.next(true);
+                        // s.next(true);
                     }
                 else{
                     s.error(new Error(message));
@@ -89,8 +91,11 @@ export class GammuModemDriver implements IModemDriver{
 
             gammu.stdout.on('data', data =>{
                 let message = String(data);
+                
                 if(message.startsWith("Sending SMS")
-                    || message.startsWith("....waiting for network answer")){
+                    || message.startsWith("....waiting for network answer")
+                    || message.startsWith("..error")){
+
                     // s.next(true);
                 }
                 else if(message.startsWith("..OK")){

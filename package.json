@@ -8,7 +8,8 @@
   },
   "scripts": {
     "btest": "tsc -p test",
-    "test": "npm run btest && mocha test"
+    "test": "npm run btest && mocha test",
+    "integration-test":"tsc -p test/integration-tests && mocha test/integration-tests"
   },
   "repository": {
     "type": "git",

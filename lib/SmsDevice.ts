@@ -37,6 +37,9 @@ export class SmsDevice implements ISmsDevice{
                 if(r){
                     this._configFilePath = configFilePath;
                 }
+                else{
+                    s.error(new Error('Config file not found: ' + configFilePath));
+                }
                 
                 s.next(r);
                 s.complete();   
