@@ -8,8 +8,6 @@ The library is designed to easily customized where each class has a single respo
 
 ## Installation
 
-NOT READY YET! STILL IN DEVELOPMENT
-
 `npm install sms-device`
 
 ## Usage
