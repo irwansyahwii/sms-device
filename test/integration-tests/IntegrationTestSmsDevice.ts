@@ -1,4 +1,5 @@
 import {ISmsDevice, SmsDevice} from '../../index';
+// import {ISmsDevice, SmsDevice} from 'sms-device';
 import {assert} from 'chai';
 
 

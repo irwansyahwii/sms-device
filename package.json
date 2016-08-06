@@ -9,7 +9,8 @@
   "scripts": {
     "btest": "tsc -p test",
     "test": "npm run btest && mocha test",
-    "integration-test":"tsc -p test/integration-tests && mocha test/integration-tests"
+    "integration-test":"tsc -p test/integration-tests && mocha test/integration-tests",
+    "build": "rm -rf build && mkdir build && tsc -p . && cp package.json build/package.json && cp README.md build/README.md"
   },
   "repository": {
     "type": "git",
