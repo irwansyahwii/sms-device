@@ -36,5 +36,7 @@
     "raw-modem": "*",
     "rxjs": "^5.0.0-beta.10"
   },
-  "dependencies": {}
+  "dependencies": {
+    "serialport": "^4.0.1"
+  }
 }
