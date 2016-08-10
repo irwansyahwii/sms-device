@@ -37,3 +37,9 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
+doc/SMS*
+doc/AT_Comm*
+doc/FAQ*
+doc/gsm*
+doc/ubinetic*
+doc/wavecom*
