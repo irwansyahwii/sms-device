@@ -1,8 +1,11 @@
 [gammu]
-port = /dev/ttyUSB1
+device = /dev/ttyUSB0
 connection = at115200
+synchronizetime=no
+usephonedb=yes
+#connection = at
 # Debugging
-logformat = textall
+#logformat = textall
 
 
 # SMSD configuration, see gammu-smsdrc(5)

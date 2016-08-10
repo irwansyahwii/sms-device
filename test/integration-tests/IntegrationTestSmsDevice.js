@@ -1,5 +1,6 @@
 "use strict";
 const index_1 = require('../../index');
+// import {ISmsDevice, SmsDevice} from 'sms-device';
 const chai_1 = require('chai');
 describe('SmsDevice', function () {
     describe('identify()', function () {

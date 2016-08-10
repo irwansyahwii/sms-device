@@ -1,3 +1,4 @@
-"use strict";
-require('./IntegrationTestFileManager');
-require('./IntegrationTestSmsDevice');
+// import './IntegrationTestFileManager';
+// import './IntegrationTestSmsDevice';
+let SerialPort = require('serialport');
+let port = new SerialPort("/dev/ttyUSB0", {});

@@ -10,6 +10,7 @@ import {ISmsMetadataParser} from './ISmsMetadataParser';
 import {GammuSmsMetadataParser} from './gammu/GammuSmsMetadataParser';
 import {GammuIdentifyMetadataParser} from './gammu/GammuIdentifyMetadataParser';
 import {GammuModemDriver} from './gammu/GammuModemDriver';
+import {WavecomModemDriver} from './wavecom/WavecomModemDriver';
 
 /**
  * Provide a default implementation for ISmsDevice
@@ -26,7 +27,14 @@ export class SmsDevice implements ISmsDevice{
     }
 
     static create():ISmsDevice{
-        return new SmsDevice(new FileManager(), new GammuModemDriver()
+        return new SmsDevice({
+            isExists: function(path:string): Rx.Observable<boolean>{
+                return Rx.Observable.create(s =>{
+                    s.next(true);
+                    s.complete();
+                })
+            }
+        }, new WavecomModemDriver()
             , new GammuIdentifyMetadataParser()
             , new GammuSmsMetadataParser());
     }

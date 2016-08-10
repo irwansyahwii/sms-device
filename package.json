@@ -9,7 +9,7 @@
   "scripts": {
     "btest": "tsc -p test",
     "test": "npm run btest && mocha test",
-    "integration-test":"tsc -p test/integration-tests && mocha test/integration-tests",
+    "integration-test": "tsc -p test/integration-tests && mocha test/integration-tests",
     "build": "rm -rf build && mkdir build && tsc -p . && cp package.json build/package.json && cp README.md build/README.md"
   },
   "repository": {
@@ -33,6 +33,10 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "moment": "^2.14.1",
+    "raw-modem": "0.0.1",
     "rxjs": "^5.0.0-beta.10"
+  },
+  "dependencies": {
+    "modem": "^1.0.3"
   }
 }
