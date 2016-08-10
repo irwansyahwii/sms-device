@@ -33,7 +33,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "moment": "^2.14.1",
-    "raw-modem": "0.0.1",
+    "raw-modem": "*",
     "rxjs": "^5.0.0-beta.10"
   },
   "dependencies": {

@@ -21,9 +21,9 @@ describe('SmsDevice', function(){
                     assert.isNotNull(r);
                     console.log(r);
 
-                    done();
                 }, err =>{
                     console.log(err);
+                }, () =>{
                     done();
                 })
 
@@ -46,9 +46,9 @@ describe('SmsDevice', function(){
                     assert.isNotNull(r);
                     console.log(r);
 
-                    done();
                 }, err =>{
                     console.log(err);
+                }, () =>{
                     done();
                 })
         });
@@ -60,7 +60,7 @@ describe('SmsDevice', function(){
 
             let smsDevice = SmsDevice.create();
 
-            let configFilePath = __dirname + '/smsd.rc';
+            let configFilePath = '/dev/ttyUSB0';
 
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {                    
@@ -68,12 +68,10 @@ describe('SmsDevice', function(){
                 })
                 .subscribe(r =>{
                     assert.isNotNull(r);
-                    console.log(r);
-
-                    done();
                 }, err =>{
                     console.log('ERROR:');
                     console.log(err);
+                }, () =>{
                     done();
                 })
         });

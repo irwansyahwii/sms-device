@@ -8,15 +8,21 @@ export class WavecomModemDriver implements IModemDriver{
 
     }
 
+    _getModemOptions(configFile:string){
+        let modemOptions = new ModemOptions();
+        modemOptions.autoOpen = false;
+        modemOptions.baudRate = 115200;
+        modemOptions.deviceName = configFile;
+        
+        return modemOptions;
+    }
+
     identify(configFile:string): Rx.Observable<string>{
         return Rx.Observable.create(s =>{
 
             let serialPort = new DefaultSerialPort();
 
-            let modemOptions = new ModemOptions();
-            modemOptions.autoOpen = false;
-            modemOptions.baudRate = 115200;
-            modemOptions.deviceName = configFile;
+            let modemOptions = this._getModemOptions(configFile);
             let modem = new RawModem(serialPort);
 
             let result = {
@@ -59,8 +65,12 @@ SIM IMSI             : ${result.sim_imsi}
                     result.imei = response.trim();
                     return modem.send('AT+CIMI\r')
                 })                
-                .subscribe(response =>{
+                .flatMap((response)=>{
                     result.sim_imsi = response.trim();
+                    return modem.close();
+                })                
+                .subscribe(response =>{
+                    
                     let resultString = resultToString(result);
 
                     s.next(resultString);
@@ -70,7 +80,28 @@ SIM IMSI             : ${result.sim_imsi}
     }
 
     readAllSms(configFile:string): Rx.Observable<string>{
-        return null;
+        return Rx.Observable.create(s =>{
+
+            let serialPort = new DefaultSerialPort();
+
+            let modemOptions = this._getModemOptions(configFile);
+
+            let modem = new RawModem(serialPort);
+            
+            modem.open(modemOptions)
+                .flatMap(() => modem.send('AT+CMGF=1\r'))
+                .flatMap((response)=>{
+                    return modem.send('AT+CMGL="ALL"\r')
+                })
+                .flatMap((response) => {
+                    s.next(response);
+
+                    return modem.close()
+                })
+                .subscribe(response =>{
+                    
+                }, err => s.error(err), () => s.complete())
+        })    
     }
 
     deleteAllSms(configFile:string, startLocation:number, endLocation:number):Rx.Observable<void>{
@@ -78,6 +109,42 @@ SIM IMSI             : ${result.sim_imsi}
     }
 
     sendSms(configFile:string, destinationPhone:string, message: string): Rx.Observable<void>{
-        return null;
+        return Rx.Observable.create(s =>{
+
+            let serialPort = new DefaultSerialPort();
+
+            let modemOptions = this._getModemOptions(configFile);
+
+            let modem = new RawModem(serialPort);
+            
+            modem.open(modemOptions)
+                .flatMap(() => modem.send('AT+CSCS="GSM"\r'))
+                .flatMap(() => modem.send('AT+CSMP=1,173,0,7\r'))
+                .flatMap(() => modem.send('AT+CMGF=1\r'))
+                .flatMap(response =>{
+                    return modem.send(`AT+CMGS="${destinationPhone}"\r`, 
+                        (buffer:any, subscriber: Rx.Subscriber<string>)=>{
+
+                            let responseString = buffer.toString().trim();
+                            if(responseString === ">"){
+                                subscriber.next("");
+                                subscriber.complete();
+                            }
+                        })
+                })                             
+                .flatMap(response =>{
+                    return modem.send(`${message}\x1A\r`)
+                })                         
+                .flatMap((response) => {
+                    s.next();
+                    
+                    return modem.close()
+                })                
+                .subscribe(response =>{
+
+                }, 
+                err => s.error(err), 
+                () => s.complete());
+        })    
     }    
 }

@@ -7,7 +7,7 @@ import {IModemDriver} from './IModemDriver';
 import {IIdentifyMetadataParser} from './IIdentifyMetadataParser';
 import {SmsInfo} from './SmsInfo';
 import {ISmsMetadataParser} from './ISmsMetadataParser';
-import {GammuSmsMetadataParser} from './gammu/GammuSmsMetadataParser';
+import {WavecomSmsMetadataParser} from './wavecom/WavecomSmsMetadataParser';
 import {GammuIdentifyMetadataParser} from './gammu/GammuIdentifyMetadataParser';
 import {GammuModemDriver} from './gammu/GammuModemDriver';
 import {WavecomModemDriver} from './wavecom/WavecomModemDriver';
@@ -36,7 +36,7 @@ export class SmsDevice implements ISmsDevice{
             }
         }, new WavecomModemDriver()
             , new GammuIdentifyMetadataParser()
-            , new GammuSmsMetadataParser());
+            , new WavecomSmsMetadataParser());
     }
 
     setConfigFile(configFilePath:string):Rx.Observable<void>{

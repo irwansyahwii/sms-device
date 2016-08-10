@@ -15,9 +15,9 @@ describe('SmsDevice', function () {
                 .subscribe(r => {
                 chai_1.assert.isNotNull(r);
                 console.log(r);
-                done();
             }, err => {
                 console.log(err);
+            }, () => {
                 done();
             });
         });
@@ -34,9 +34,9 @@ describe('SmsDevice', function () {
                 .subscribe(r => {
                 chai_1.assert.isNotNull(r);
                 console.log(r);
-                done();
             }, err => {
                 console.log(err);
+            }, () => {
                 done();
             });
         });
@@ -45,7 +45,7 @@ describe('SmsDevice', function () {
         it('send an sms to the device', function (done) {
             this.timeout(9000);
             let smsDevice = index_1.SmsDevice.create();
-            let configFilePath = __dirname + '/smsd.rc';
+            let configFilePath = '/dev/ttyUSB0';
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {
                 return smsDevice.sendSms('08891366079', 'from integration test');
@@ -53,10 +53,10 @@ describe('SmsDevice', function () {
                 .subscribe(r => {
                 chai_1.assert.isNotNull(r);
                 console.log(r);
-                done();
             }, err => {
                 console.log('ERROR:');
                 console.log(err);
+            }, () => {
                 done();
             });
         });
