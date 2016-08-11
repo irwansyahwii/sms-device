@@ -138,4 +138,22 @@ export class SmsDevice implements ISmsDevice{
             }            
         })
     }
+
+    getUSSD(ussdCode:string): Rx.Observable<string>{
+        return Rx.Observable.create(s =>{
+            if(this._configFilePath.length <= 0){
+                s.error(new Error('getUSSD failed. No config file specified.'));
+            }
+            else{
+                this.modemDriver.getUSSD(this._configFilePath, ussdCode)
+                    .subscribe(r => {
+                        s.next(r);
+                    }, err =>{
+                        s.error(err);
+                    }, ()=>{
+                        s.complete();
+                    })
+            }            
+        })
+    }
 }

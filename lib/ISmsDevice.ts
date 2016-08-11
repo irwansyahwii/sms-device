@@ -45,4 +45,9 @@ export interface ISmsDevice{
      * @return {Rx.Observable<void>} An Observable
      */
     sendSms(destinationPhone:string, message:string):Rx.Observable<void>;
+
+    /**
+     * Send USSD command to the modem
+     */
+    getUSSD(ussdCode:string): Rx.Observable<string>;
 }
