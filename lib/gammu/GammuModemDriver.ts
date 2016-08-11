@@ -112,4 +112,24 @@ export class GammuModemDriver implements IModemDriver{
             });
         });        
     }
+
+    getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+        return Rx.Observable.create(s =>{
+                        
+            const gammu = spawn(`gammu`, [`-c`, configFile, `getussd`]);
+
+            gammu.stderr.on('data', data =>{
+                s.error(new Error(String(data)));
+            });
+
+            gammu.stdout.on('data', data =>{
+                s.next(String(data));
+            })
+            
+            gammu.on('close', code =>{
+                s.complete();
+            });
+        });
+    }
+    
 }

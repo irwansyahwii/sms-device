@@ -129,6 +129,9 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                getUSSD(configFile, ussdCommand) {
+                    return null;
                 }
             };
             let identifyMetadataParser = {
@@ -181,6 +184,9 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                getUSSD(configFile, ussdCommand) {
+                    return null;
                 }
             };
             let identifyMetadataParser = {
@@ -261,6 +267,9 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                getUSSD(configFile, ussdCommand) {
+                    return null;
                 }
             };
             let smsMetadataParser = {
@@ -318,6 +327,9 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                getUSSD(configFile, ussdCommand) {
+                    return null;
                 }
             };
             let smsMetadataParser = {
@@ -400,6 +412,9 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                getUSSD(configFile, ussdCommand) {
+                    return null;
                 }
             };
             let smsMetadataParser = {
@@ -481,6 +496,9 @@ describe('SmsDevice', function () {
                         s.next();
                         s.complete();
                     });
+                },
+                getUSSD(configFile, ussdCommand) {
+                    return null;
                 }
             };
             let smsMetadataParser = {

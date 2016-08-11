@@ -39,4 +39,13 @@ export interface IModemDriver{
      * @param {string} message - The sms message
      */
     sendSms(configFile:string, destinationPhone:string, message: string): Rx.Observable<void>;
+
+    /**
+     * Send a USSD command to the modem
+     * 
+     * @param {string} ussdCommand - The USSD code
+     * 
+     * @return {Rx.Observable<string>} An Observable containing the response string
+     */
+    getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>;
 }

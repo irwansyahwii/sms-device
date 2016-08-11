@@ -152,6 +152,9 @@ describe('SmsDevice', function(){
                         s.next();
                         s.complete();
                     })
+                },
+                getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+                    return null;
                 }                                         
             }
 
@@ -212,7 +215,10 @@ describe('SmsDevice', function(){
                         s.next();
                         s.complete();
                     })
-                }                                                
+                },
+                getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+                    return null;
+                }                                                           
             }
 
             let identifyMetadataParser:IIdentifyMetadataParser = {
@@ -307,7 +313,10 @@ describe('SmsDevice', function(){
                         s.next();
                         s.complete();
                     })
-                }                                                
+                },
+                getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+                    return null;
+                }                                                                                                                           
             }
             
             let smsMetadataParser: ISmsMetadataParser = {
@@ -375,7 +384,10 @@ describe('SmsDevice', function(){
                         s.next();
                         s.complete();
                     })
-                }                                                
+                },
+                getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+                    return null;
+                }                                                                                                                           
             }
 
             let smsMetadataParser: ISmsMetadataParser = {
@@ -473,7 +485,10 @@ describe('SmsDevice', function(){
                         s.next();
                         s.complete();
                     })
-                }                
+                },
+                getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+                    return null;
+                }                                                                                           
             }
             
             let smsMetadataParser: ISmsMetadataParser = {
@@ -570,7 +585,10 @@ describe('SmsDevice', function(){
                         s.next();
                         s.complete();
                     })
-                }
+                },
+                getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+                    return null;
+                }                                                                           
             }
             
             let smsMetadataParser: ISmsMetadataParser = {

@@ -10,9 +10,28 @@ describe('WavecomModemDriver', function(){
             driver.identify('/dev/ttyUSB0')
                 .subscribe(r =>{
                     console.log(r);
+                }, err => {
+                    console.log(err);
+                }, ()=>{
                     done();
                 })
         });
     })
+    describe('getUSSD()', function(){
+        it('return the correct result', function(done){
+            this.timeout(9000);
+            let driver = new WavecomModemDriver();
+
+            driver.getUSSD('/dev/ttyUSB0', '*888#')
+                .subscribe(r =>{
+                    console.log('USSD response:');
+                    console.log(r);
+                }, err =>{
+                    console.log(err);
+                }, () =>{
+                    done();
+                })
+        });
+    })    
 });
 

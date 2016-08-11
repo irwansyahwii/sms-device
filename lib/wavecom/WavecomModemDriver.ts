@@ -50,23 +50,28 @@ SIM IMSI             : ${result.sim_imsi}
             modem.open(modemOptions)
                 .flatMap(() => modem.send('AT+CGMM\r'))
                 .flatMap((response)=>{
-                    result.model = response.trim();
+                    let responseTrimmed = response.trim().replace('AT+CGMM', '');
+                    result.model = responseTrimmed.trim();
                     return modem.send('AT+CGMI\r')
                 })
                 .flatMap((response)=>{
-                    result.manufacturer = response.trim();
+                    let responseTrimmed = response.trim().replace('AT+CGMI', '');
+                    result.manufacturer = responseTrimmed.trim();
                     return modem.send('AT+CGMR\r')
                 })                
                 .flatMap((response)=>{
-                    result.firmware = response.trim();
+                    let responseTrimmed = response.trim().replace('AT+CGMR', '');
+                    result.firmware = responseTrimmed.trim()
                     return modem.send('AT+CGSN\r')
                 })                
                 .flatMap((response)=>{
-                    result.imei = response.trim();
+                    let responseTrimmed = response.trim().replace('AT+CGSN', '');
+                    result.imei = responseTrimmed.trim();
                     return modem.send('AT+CIMI\r')
                 })                
                 .flatMap((response)=>{
-                    result.sim_imsi = response.trim();
+                    let responseTrimmed = response.trim().replace('AT+CIMI', '');
+                    result.sim_imsi = responseTrimmed.trim();
                     return modem.close();
                 })                
                 .subscribe(response =>{
@@ -175,4 +180,36 @@ SIM IMSI             : ${result.sim_imsi}
                 () => s.complete());
         })    
     }    
+
+    getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+        return Rx.Observable.create(s =>{
+            let serialPort = new DefaultSerialPort();
+
+            let modemOptions = this._getModemOptions(configFile);
+            modemOptions.commandTimeout = 8000;
+
+            let modem = new RawModem(serialPort);
+            
+            modem.open(modemOptions)
+                .flatMap(()=>{
+                    
+                    let completeString = '';
+                    return modem.send(`AT+CUSD=1,"${ussdCommand}",15\r`, (buffer:any, subscriber: Rx.Subscriber<string>) =>{
+                        completeString += buffer.toString();
+                        
+                        let trimmedCompleteString = completeString.trim();
+
+                        if(trimmedCompleteString.endsWith('",0')){
+                            subscriber.next(trimmedCompleteString);
+                            subscriber.complete();
+                        }
+                    });
+                })
+                .subscribe(r =>{
+                    s.next(r);
+                }, err => s.error(err), ()=>{
+                    s.complete();
+                }) 
+        })
+    }
 }
