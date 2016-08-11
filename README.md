@@ -4,7 +4,7 @@ Sms-Device
 [![Build Status](https://travis-ci.org/irwansyahwii/sms-device.svg?branch=master)](https://travis-ci.org/irwansyahwii/sms-device)
 
 
-A library that provides an abstraction to send/receive sms through a modem. This library also provided an implementation that using `gammu` command line to communicate with the modem.
+A library that provides an abstraction to send/receive sms through a modem. This library also provided two implementations, the first one using `gammu` command line to communicate with the modem, the second one using `raw-modem` module tested on Wavecom 8 Ports modem.
 
 The library is designed to easily customized where each class has a single responsibility that easily interchangeable with another class.
 
@@ -74,7 +74,7 @@ This library is using `gammu` to communicate with the modem. So first make sure 
 
 ### Customization
 
-You can implement your own `IConfigBasedSmsDeviceManager, ISmsMetadataParser, and IIdentifyMetadataParser` if you decided to roll your own device manager. Once you have the implementation then you can assign them to an `SmsDevice` instance without ever changing the client code.
+You can implement your own `IModemDriver, ISmsMetadataParser, and IIdentifyMetadataParser` if you decided to roll your own device manager. Once you have the implementation then you can assign them to an `SmsDevice` instance without ever changing the client code.
 
 
 ## Contributions
