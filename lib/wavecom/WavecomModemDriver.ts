@@ -105,7 +105,35 @@ SIM IMSI             : ${result.sim_imsi}
     }
 
     deleteAllSms(configFile:string, startLocation:number, endLocation:number):Rx.Observable<void>{
-        return null;
+        return Rx.Observable.create(s =>{
+
+            let serialPort = new DefaultSerialPort();
+
+            let modemOptions = this._getModemOptions(configFile);
+
+            let modem = new RawModem(serialPort);
+
+            modem.open(modemOptions)
+                .flatMap(() => {
+                    return Rx.Observable.range(startLocation, (endLocation - startLocation) + 1);
+                })
+                .flatMap((messageIndex) =>{
+                    let command = `AT+CMGD=${messageIndex},0\r`;
+                    return modem.send(command);
+                })
+                .skipWhile((value, index) =>{
+                    return index !== (endLocation - startLocation);
+                })
+                .flatMap(() => {
+                    console.log('all finished closing modem');
+                    s.next();
+
+                    return modem.close()
+                })
+                .subscribe(response =>{
+                    
+                }, err => s.error(err), () => s.complete())            
+        })    
     }
 
     sendSms(configFile:string, destinationPhone:string, message: string): Rx.Observable<void>{
