@@ -45,5 +45,23 @@ OK
                 done();
             }, null, () => { });
         });
+        it('can parse a USSD response telling masa tenggang', function (done) {
+            let ussdResponse = `
+AT+CUSD=1,"*888#",15
+OK
+
++CUSD: 2,"Masa tenggang kartu Anda akan berakhir pada 26/08/2016. Silakan lakukan pengisian ulang.",0
+
+            `;
+            let parser = new WavecomUSSDResponseParser_1.WavecomUSSDResponseParser();
+            parser.parse(ussdResponse)
+                .subscribe(responseInfo => {
+                chai_1.assert.isNotNull(responseInfo);
+                console.log(responseInfo);
+                chai_1.assert.equal(responseInfo.responseType, USSDResponse_1.USSDResponseType.Terminated, 'responseType is wrong');
+                chai_1.assert.equal(responseInfo.text, `Masa tenggang kartu Anda akan berakhir pada 26/08/2016. Silakan lakukan pengisian ulang.`, 'text is wrong');
+                done();
+            }, null, () => { });
+        });
     });
 });

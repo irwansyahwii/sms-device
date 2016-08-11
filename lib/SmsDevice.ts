@@ -152,7 +152,10 @@ export class SmsDevice implements ISmsDevice{
             }
             else{
                 this.modemDriver.getUSSD(this._configFilePath, ussdCode)
-                    .flatMap(responseString => this.ussdResponseParser.parse(responseString))
+                    .flatMap(responseString => {
+                        console.log('getUSSD response:', responseString);
+                        return this.ussdResponseParser.parse(responseString);
+                    })
                     .subscribe(r => {
                         s.next(r);
                     }, err =>{
