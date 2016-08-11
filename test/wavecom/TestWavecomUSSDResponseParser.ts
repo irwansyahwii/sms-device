@@ -6,7 +6,7 @@ import {USSDResponseType} from '../../lib/USSDResponse';
 
 describe('WavecomUSSDResponseParser', function(){
     describe('parse', function(){
-        it('can parse a USSD response', function(done){
+        it('can parse a USSD response from regular Telkomsel card', function(done){
             let ussdResponse = `
 AT+CUSD=1,"*888#",15
 OK
@@ -27,7 +27,28 @@ BBMan makin asik dgn stiker Mas Bewok! Beli skrg di http://tsel.me/msbewok
 BBMan makin asik dgn stiker Mas Bewok! Beli skrg di http://tsel.me/msbewok
 
 2.Info Kartu`, 'text is wrong');
-                }, null, () => done());
+                    done();
+                }, null, () => {});
+        })
+
+        it('can parse a USSD response from a Telkomsel SD card', function(done){
+            let ussdResponse = `
+AT+CUSD=1,"*776#",15
+OK
+
++CUSD: 2,"Maaf, operasi gagal karena format pesan yang tidak valid.",15
+
+            `;
+
+            let parser = new WavecomUSSDResponseParser();
+            parser.parse(ussdResponse)
+                .subscribe(responseInfo =>{
+                    assert.isNotNull(responseInfo);
+                    console.log(responseInfo);
+                    assert.equal(responseInfo.responseType, USSDResponseType.Terminated, 'responseType is wrong');
+                    assert.equal(responseInfo.text, `Maaf, operasi gagal karena format pesan yang tidak valid.`, 'text is wrong');
+                    done();
+                }, null, () => {});
         })
     })
 })

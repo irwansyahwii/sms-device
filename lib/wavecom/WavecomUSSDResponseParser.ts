@@ -10,7 +10,7 @@ export class WavecomUSSDResponseParser implements IUSSDResponseParser{
     parse(ussdResponseString:string) : Rx.Observable<USSDResponse>{
         return Rx.Observable.create(s =>{
             let lines = ussdResponseString.split('\n');
-
+            console.log(lines);
             let result = new USSDResponse();
 
             Rx.Observable.from(lines, Rx.Scheduler.async)
@@ -41,13 +41,28 @@ export class WavecomUSSDResponseParser implements IUSSDResponseParser{
                                     responseType = USSDResponseType.NotSupported;
                             }
                             result.responseType = responseType;
-                            result.text += parts[1];
 
+                            let textTrimmed = parts[1].trim();
+                            if(textTrimmed.endsWith('",0') || textTrimmed.endsWith('",15')){
+                                let substractionValue = 3;
+                                if(textTrimmed.endsWith('",15')){
+                                    substractionValue = 4;
+                                }
+                                textTrimmed = textTrimmed.substr(0, textTrimmed.length - substractionValue);
+                                result.text = textTrimmed;
+                                
+                                s.next(result);
+                                s.complete();
+                            }
+                            else{
+                                result.text += parts[1];
+                            }
                         }
                         
                     }
                     else if(lineTrimmed.startsWith('",')){
                         s.next(result);
+                        s.complete();
                     }
                     else{
                         if(result.text.length > 0){
@@ -55,7 +70,7 @@ export class WavecomUSSDResponseParser implements IUSSDResponseParser{
                         }
                         result.text += line;
                     }
-                }, null, () => s.complete());
+                }, null);
         })
     }
 }
