@@ -1,5 +1,4 @@
 import {RawModem, DefaultSerialPort, ModemOptions} from 'raw-modem';
-
 import {IModemDriver} from '../IModemDriver';
 import Rx = require('rxjs/Rx');
 
@@ -189,7 +188,6 @@ SIM IMSI             : ${result.sim_imsi}
             modemOptions.commandTimeout = 8000;
 
             let modem = new RawModem(serialPort);
-            
             modem.open(modemOptions)
                 .flatMap(()=>{
                     

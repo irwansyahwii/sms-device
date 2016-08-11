@@ -1,6 +1,7 @@
 import Rx = require('rxjs/Rx');
 import {SmsDeviceInfo} from './SmsDeviceInfo';
 import {SmsInfo} from './SmsInfo';
+import {USSDResponse} from './USSDResponse';
 
 /**
  * Defined a set of operations for an Sms device.
@@ -48,6 +49,8 @@ export interface ISmsDevice{
 
     /**
      * Send USSD command to the modem
+     * 
+     * @return {Rx.Observable<USSDResponse>} - An Observable containing the USSD response
      */
-    getUSSD(ussdCode:string): Rx.Observable<string>;
+    getUSSD(ussdCode:string): Rx.Observable<USSDResponse>;
 }

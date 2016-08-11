@@ -5,29 +5,29 @@ import {assert} from 'chai';
 
 
 describe('SmsDevice', function(){
-    describe('deleteAllSms()', function(){
-        it('read all sms from the device', function(done){
-            this.timeout(9000);
+    // describe('deleteAllSms()', function(){
+    //     it('delete all sms from the device', function(done){
+    //         this.timeout(9000);
 
-            let smsDevice = SmsDevice.create();
+    //         let smsDevice = SmsDevice.create();
 
-            let configFilePath = '/dev/ttyUSB0';
+    //         let configFilePath = '/dev/ttyUSB0';
 
-            smsDevice.setConfigFile(configFilePath)
-                .flatMap(v => {                    
-                    return smsDevice.deleteAllSms(3, 3);
-                })
-                .subscribe(r =>{
-                    assert.isNotNull(r);
-                    console.log(r);
+    //         smsDevice.setConfigFile(configFilePath)
+    //             .flatMap(v => {                    
+    //                 return smsDevice.deleteAllSms(3, 3);
+    //             })
+    //             .subscribe(r =>{
+    //                 assert.isNotNull(r);
+    //                 console.log(r);
 
-                }, err =>{
-                    console.log(err);
-                }, () =>{
-                    done();
-                })
-        });
-    });
+    //             }, err =>{
+    //                 console.log(err);
+    //             }, () =>{
+    //                 done();
+    //             })
+    //     });
+    // });
     
     // describe('identify()', function(){
     //     it('identify the device', function(done){
@@ -100,5 +100,29 @@ describe('SmsDevice', function(){
     //             })
     //     });
     // });
+
+    describe('getUSSD()', function(){
+        it('getUSSD() response', function(done){
+            this.timeout(9000);
+
+            let smsDevice = SmsDevice.create();
+
+            let configFilePath = '/dev/ttyUSB0';
+
+            smsDevice.setConfigFile(configFilePath)
+                .flatMap(v => {                    
+                    return smsDevice.getUSSD('*888#');
+                })
+                .subscribe(r =>{
+                    assert.isNotNull(r);
+                    console.log(r);
+
+                }, err =>{
+                    console.log(err);
+                }, () =>{
+                    done();
+                })
+        });
+    });
 
 })

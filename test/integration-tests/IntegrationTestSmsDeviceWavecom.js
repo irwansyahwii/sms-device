@@ -3,25 +3,25 @@ const index_1 = require('../../index');
 // import {ISmsDevice, SmsDevice} from 'sms-device';
 const chai_1 = require('chai');
 describe('SmsDevice', function () {
-    describe('deleteAllSms()', function () {
-        it('read all sms from the device', function (done) {
-            this.timeout(9000);
-            let smsDevice = index_1.SmsDevice.create();
-            let configFilePath = '/dev/ttyUSB0';
-            smsDevice.setConfigFile(configFilePath)
-                .flatMap(v => {
-                return smsDevice.deleteAllSms(3, 3);
-            })
-                .subscribe(r => {
-                chai_1.assert.isNotNull(r);
-                console.log(r);
-            }, err => {
-                console.log(err);
-            }, () => {
-                done();
-            });
-        });
-    });
+    // describe('deleteAllSms()', function(){
+    //     it('delete all sms from the device', function(done){
+    //         this.timeout(9000);
+    //         let smsDevice = SmsDevice.create();
+    //         let configFilePath = '/dev/ttyUSB0';
+    //         smsDevice.setConfigFile(configFilePath)
+    //             .flatMap(v => {                    
+    //                 return smsDevice.deleteAllSms(3, 3);
+    //             })
+    //             .subscribe(r =>{
+    //                 assert.isNotNull(r);
+    //                 console.log(r);
+    //             }, err =>{
+    //                 console.log(err);
+    //             }, () =>{
+    //                 done();
+    //             })
+    //     });
+    // });
     // describe('identify()', function(){
     //     it('identify the device', function(done){
     //         this.timeout(9000);
@@ -79,4 +79,23 @@ describe('SmsDevice', function () {
     //             })
     //     });
     // });
+    describe('getUSSD()', function () {
+        it('getUSSD() response', function (done) {
+            this.timeout(9000);
+            let smsDevice = index_1.SmsDevice.create();
+            let configFilePath = '/dev/ttyUSB0';
+            smsDevice.setConfigFile(configFilePath)
+                .flatMap(v => {
+                return smsDevice.getUSSD('*888#');
+            })
+                .subscribe(r => {
+                chai_1.assert.isNotNull(r);
+                console.log(r);
+            }, err => {
+                console.log(err);
+            }, () => {
+                done();
+            });
+        });
+    });
 });

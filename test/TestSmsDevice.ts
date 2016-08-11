@@ -42,7 +42,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err =>{
@@ -62,7 +62,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err =>{
@@ -82,7 +82,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err =>{
@@ -105,7 +105,7 @@ describe('SmsDevice', function(){
                     });
                 }
             };
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null, null);
 
             smsDevice.identify()
                 .subscribe(null, err =>{
@@ -170,7 +170,7 @@ describe('SmsDevice', function(){
             }
             
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, 
-                identifyMetadataParser, null);
+                identifyMetadataParser, null, null);
 
             smsDevice.setConfigFile('config1.rc')
                 .concat(smsDevice.identify())
@@ -234,7 +234,7 @@ describe('SmsDevice', function(){
             
 
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, 
-                identifyMetadataParser, null);
+                identifyMetadataParser, null, null);
 
             
             smsDevice.setConfigFile('config1.rc')                
@@ -263,7 +263,7 @@ describe('SmsDevice', function(){
                 }
             };
             
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null, null);
 
             smsDevice.readAllSms()
                 .subscribe(null, err =>{
@@ -333,7 +333,7 @@ describe('SmsDevice', function(){
             
 
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null, 
-                smsMetadataParser);
+                smsMetadataParser, null);
 
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
                 smsDevice.readAllSms()
@@ -405,7 +405,7 @@ describe('SmsDevice', function(){
             }
             
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null,
-                smsMetadataParser);
+                smsMetadataParser, null);
 
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
                 smsDevice.readAllSms()
@@ -432,7 +432,7 @@ describe('SmsDevice', function(){
                 }
             };
             
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null, null);
 
             smsDevice.deleteAllSms(1, 3)
                 .subscribe(null, err =>{
@@ -505,7 +505,7 @@ describe('SmsDevice', function(){
             
 
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null, 
-                smsMetadataParser);
+                smsMetadataParser, null);
 
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
                 smsDevice.deleteAllSms(1, 3)
@@ -532,7 +532,7 @@ describe('SmsDevice', function(){
                 }
             };
             
-            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null);
+            let smsDevice:ISmsDevice = new SmsDevice(fileManager, null, null, null, null);
 
             smsDevice.sendSms('08912812', 'helooo')
                 .subscribe(null, err =>{
@@ -602,7 +602,7 @@ describe('SmsDevice', function(){
             
 
             let smsDevice:ISmsDevice = new SmsDevice(fileManager, modemDriver, null, 
-                smsMetadataParser);
+                smsMetadataParser, null);
 
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, ()=>{
                 smsDevice.sendSms('012345678', 'heloo!')

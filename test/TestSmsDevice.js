@@ -30,7 +30,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err => {
                 chai_1.assert.fail(null, null, 'Must not reached here');
@@ -48,7 +48,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err => {
                 chai_1.assert.fail(null, null, 'Must not reached here');
@@ -66,7 +66,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .subscribe(null, err => {
                 chai_1.assert.equal(err.message, 'Config file not found: config1.rc');
@@ -87,7 +87,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null, null);
             smsDevice.identify()
                 .subscribe(null, err => {
                 chai_1.assert.equal(err.message, 'Identify failed. No config file specified.', 'Must not reached here');
@@ -143,7 +143,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .concat(smsDevice.identify())
                 .subscribe(null, err => {
@@ -198,7 +198,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, identifyMetadataParser, null, null);
             smsDevice.setConfigFile('config1.rc')
                 .concat(smsDevice.identify())
                 .skip(1)
@@ -222,7 +222,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null, null);
             smsDevice.readAllSms()
                 .subscribe(null, err => {
                 chai_1.assert.equal(err.message, 'readAllSms failed. No config file specified.', 'Must not reached here');
@@ -281,7 +281,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser, null);
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
                 smsDevice.readAllSms()
                     .subscribe(smsInfos => {
@@ -342,7 +342,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser, null);
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
                 smsDevice.readAllSms()
                     .subscribe(smsInfos => {
@@ -365,7 +365,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null, null);
             smsDevice.deleteAllSms(1, 3)
                 .subscribe(null, err => {
                 chai_1.assert.equal(err.message, 'deleteAllSms failed. No config file specified.', 'Must not reached here');
@@ -426,7 +426,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser, null);
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
                 smsDevice.deleteAllSms(1, 3)
                     .subscribe(smsInfos => {
@@ -449,7 +449,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, null, null, null, null);
             smsDevice.sendSms('08912812', 'helooo')
                 .subscribe(null, err => {
                 chai_1.assert.equal(err.message, 'sendSms failed. No config file specified.', 'Error message is incorrect');
@@ -509,7 +509,7 @@ describe('SmsDevice', function () {
                     });
                 }
             };
-            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser);
+            let smsDevice = new SmsDevice_1.SmsDevice(fileManager, modemDriver, null, smsMetadataParser, null);
             smsDevice.setConfigFile('config1.rc').subscribe(null, null, () => {
                 smsDevice.sendSms('012345678', 'heloo!')
                     .subscribe(smsInfos => {
