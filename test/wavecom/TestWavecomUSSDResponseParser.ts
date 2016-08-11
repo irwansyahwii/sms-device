@@ -44,7 +44,6 @@ OK
             parser.parse(ussdResponse)
                 .subscribe(responseInfo =>{
                     assert.isNotNull(responseInfo);
-                    console.log(responseInfo);
                     assert.equal(responseInfo.responseType, USSDResponseType.Terminated, 'responseType is wrong');
                     assert.equal(responseInfo.text, `Maaf, operasi gagal karena format pesan yang tidak valid.`, 'text is wrong');
                     done();
@@ -64,7 +63,6 @@ OK
             parser.parse(ussdResponse)
                 .subscribe(responseInfo =>{
                     assert.isNotNull(responseInfo);
-                    console.log(responseInfo);
                     assert.equal(responseInfo.responseType, USSDResponseType.Terminated, 'responseType is wrong');
                     assert.equal(responseInfo.text, `Masa tenggang kartu Anda akan berakhir pada 26/08/2016. Silakan lakukan pengisian ulang.`, 'text is wrong');
                     done();

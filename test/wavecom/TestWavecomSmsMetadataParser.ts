@@ -4,7 +4,7 @@ import {ISmsMetadataParser} from '../../lib/ISmsMetadataParser';
 import {WavecomSmsMetadataParser} from '../../lib/wavecom/WavecomSmsMetadataParser';
 import moment = require('moment');
 
-describe('GammuSmsMetadataParser', function(){
+describe('WavecomSmsMetadataParser', function(){
     describe('parse', function(){
         // it('parse device open error correctly', function(done){
         //     let parser:ISmsMetadataParser = new GammuSmsMetadataParser();

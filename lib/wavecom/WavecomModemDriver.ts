@@ -195,8 +195,6 @@ SIM IMSI             : ${result.sim_imsi}
                     return modem.send(`AT+CUSD=1,"${ussdCommand}",15\r`, (buffer:any, subscriber: Rx.Subscriber<string>) =>{
                         completeString += buffer.toString();
                         
-                        console.log('completeString:', completeString);
-
                         let trimmedCompleteString = completeString.trim();
 
                         if(trimmedCompleteString.endsWith('",0') 

@@ -10,7 +10,6 @@ export class WavecomUSSDResponseParser implements IUSSDResponseParser{
     parse(ussdResponseString:string) : Rx.Observable<USSDResponse>{
         return Rx.Observable.create(s =>{
             let lines = ussdResponseString.split('\n');
-            console.log(lines);
             let result = new USSDResponse();
 
             Rx.Observable.from(lines, Rx.Scheduler.async)

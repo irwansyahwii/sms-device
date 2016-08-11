@@ -2,7 +2,7 @@
 const chai_1 = require('chai');
 const WavecomSmsMetadataParser_1 = require('../../lib/wavecom/WavecomSmsMetadataParser');
 const moment = require('moment');
-describe('GammuSmsMetadataParser', function () {
+describe('WavecomSmsMetadataParser', function () {
     describe('parse', function () {
         // it('parse device open error correctly', function(done){
         //     let parser:ISmsMetadataParser = new GammuSmsMetadataParser();
