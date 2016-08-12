@@ -26,7 +26,7 @@ describe('SmsDevice', function () {
         it('identify the device', function (done) {
             this.timeout(9000);
             let smsDevice = index_1.SmsDevice.create();
-            let configFilePath = '/dev/ttyUSB3';
+            let configFilePath = '/dev/ttyUSB2';
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {
                 return smsDevice.identify();
@@ -45,7 +45,7 @@ describe('SmsDevice', function () {
         it('read all sms from the device', function (done) {
             this.timeout(9000);
             let smsDevice = index_1.SmsDevice.create();
-            let configFilePath = '/dev/ttyUSB3';
+            let configFilePath = '/dev/ttyUSB2';
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {
                 return smsDevice.readAllSms();
@@ -86,7 +86,7 @@ describe('SmsDevice', function () {
             let configFilePath = '/dev/ttyUSB3';
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {
-                return smsDevice.getUSSD('*888#');
+                return smsDevice.getUSSD('*776*1*664041#');
             })
                 .subscribe(r => {
                 chai_1.assert.isNotNull(r);

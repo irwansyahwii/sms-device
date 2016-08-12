@@ -192,13 +192,17 @@ SIM IMSI             : ${result.sim_imsi}
                 .flatMap(()=>{
                     
                     let completeString = '';
-                    return modem.send(`AT+CUSD=1,"${ussdCommand}",15\r`, (buffer:any, subscriber: Rx.Subscriber<string>) =>{
+                    return modem.send(`AT+CUSD=1,"${ussdCommand}"\r`, (buffer:any, subscriber: Rx.Subscriber<string>) =>{
                         completeString += buffer.toString();
                         
+                        console.log('completeString:', completeString);
+
                         let trimmedCompleteString = completeString.trim();
 
                         if(trimmedCompleteString.endsWith('",0') 
-                            || (trimmedCompleteString.startsWith('+CUSD') && trimmedCompleteString.endsWith('",15'))){
+                            || (trimmedCompleteString.endsWith('+CUSD: 4'))
+                            || (trimmedCompleteString.includes('+CUSD:') && trimmedCompleteString.endsWith('",15'))){
+                            
                             subscriber.next(trimmedCompleteString);
                             subscriber.complete();
                         }

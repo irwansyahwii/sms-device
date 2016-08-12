@@ -32,18 +32,18 @@ export class WavecomSmsMetadataParser implements ISmsMetadataParser {
             Rx.Observable.from(textArray, Rx.Scheduler.async)
                 .subscribe(line =>{
                     
-                    line = line.trim();
+                    let lineTrimmed = line.trim();
 
-                    if(line.startsWith('AT+CMGL')){
+                    if(lineTrimmed.startsWith('AT+CMGL')){
 
                     }     
-                    else if(line.startsWith('+CMGL')){
-                        let parts = line.split(',');
+                    else if(lineTrimmed.startsWith('+CMGL')){
+                        let parts = lineTrimmed.split(',');
                         currentResult = new SmsInfo();
                         results.push(currentResult);
 
                         if(parts.length !== 6){
-                            s.error(new Error('Invalid sms metadata line: ' + line));
+                            s.error(new Error('Invalid sms metadata line: ' + lineTrimmed));
                         }
                         else{
 

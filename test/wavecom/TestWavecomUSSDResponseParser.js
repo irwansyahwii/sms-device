@@ -61,5 +61,22 @@ OK
                 done();
             }, null, () => { });
         });
+        it('can parse not supported response', function (done) {
+            let ussdResponse = `
+AT+CUSD=1,"*676#",15
+OK
+
++CUSD: 4
+
+            `;
+            let parser = new WavecomUSSDResponseParser_1.WavecomUSSDResponseParser();
+            parser.parse(ussdResponse)
+                .subscribe(responseInfo => {
+                chai_1.assert.isNotNull(responseInfo);
+                chai_1.assert.equal(responseInfo.responseType, USSDResponse_1.USSDResponseType.NotSupported, 'responseType is wrong');
+                chai_1.assert.equal(responseInfo.text, ``, 'text is wrong');
+                done();
+            }, null, () => { });
+        });
     });
 });

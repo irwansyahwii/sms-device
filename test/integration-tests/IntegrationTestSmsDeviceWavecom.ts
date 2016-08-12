@@ -35,7 +35,7 @@ describe('SmsDevice', function(){
 
             let smsDevice = SmsDevice.create();
 
-            let configFilePath = '/dev/ttyUSB3';
+            let configFilePath = '/dev/ttyUSB2';
 
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {                    
@@ -60,7 +60,7 @@ describe('SmsDevice', function(){
 
             let smsDevice = SmsDevice.create();
 
-            let configFilePath = '/dev/ttyUSB3';
+            let configFilePath = '/dev/ttyUSB2';
 
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {                    
@@ -111,7 +111,7 @@ describe('SmsDevice', function(){
 
             smsDevice.setConfigFile(configFilePath)
                 .flatMap(v => {                    
-                    return smsDevice.getUSSD('*888#');
+                    return smsDevice.getUSSD('*776*1*664041#');
                 })
                 .subscribe(r =>{
                     assert.isNotNull(r);

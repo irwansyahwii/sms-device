@@ -24,7 +24,16 @@ export class WavecomUSSDResponseParser implements IUSSDResponseParser{
                         let parts = line.split(',"');
 
                         if(parts.length !== 2){
-                            s.error(new Error('+CUSD line is not valid:' + line));
+                            if(line.startsWith('+CUSD: 4')){
+                                result.responseType = USSDResponseType.NotSupported;
+                                result.text = '';
+                                s.next(result);
+                                s.complete();
+                            }
+                            else{
+                                s.error(new Error('+CUSD line is not valid:' + line));
+                            }
+                            
                         }
                         else{
                             let responseTypeString = parts[0].replace('+CUSD:', '').trim();

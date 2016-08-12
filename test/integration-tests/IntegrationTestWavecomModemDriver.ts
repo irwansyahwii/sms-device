@@ -7,7 +7,7 @@ describe('WavecomModemDriver', function(){
             this.timeout(4000);
             let driver = new WavecomModemDriver();
 
-            driver.identify('/dev/ttyUSB0')
+            driver.identify('/dev/ttyUSB2')
                 .subscribe(r =>{
                     console.log(r);
                 }, err => {
@@ -22,7 +22,7 @@ describe('WavecomModemDriver', function(){
             this.timeout(9000);
             let driver = new WavecomModemDriver();
 
-            driver.getUSSD('/dev/ttyUSB0', '*888#')
+            driver.getUSSD('/dev/ttyUSB2', '*770*5577#')
                 .subscribe(r =>{
                     console.log('USSD response:');
                     console.log(r);
