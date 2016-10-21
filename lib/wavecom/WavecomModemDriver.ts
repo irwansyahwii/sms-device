@@ -208,8 +208,11 @@ SIM IMSI             : ${result.sim_imsi}
                         }
                     });
                 })
+                .flatMap((response) => {
+                    s.next(response);                                        
+                    return modem.close()
+                })                                
                 .subscribe(r =>{
-                    s.next(r);
                 }, err => s.error(err), ()=>{
                     s.complete();
                 }) 
