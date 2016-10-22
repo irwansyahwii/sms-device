@@ -166,7 +166,7 @@ export class SmsDevice implements ISmsDevice{
         })
     }
 
-    getUSSDWithCallback(configFile:string, ussdCode:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>{
+    getUSSDWithCallback(ussdCode:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>{
         return Rx.Observable.create(s =>{
             if(this._configFilePath.length <= 0){
                 s.error(new Error('getUSSD failed. No config file specified.'));

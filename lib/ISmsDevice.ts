@@ -58,12 +58,11 @@ export interface ISmsDevice{
     /**
      * Send USSD command to the modem and wait until the callback finish then close the modem
      * 
-     * @param {string} configFile
      * @param {string} ussdCommand
      * @param {(modem:RawModem, responseString:string) => Rx.Observable<string>} callback
      * @returns {Rx.Observable<string>}
      * 
      * @memberOf ISmsDevice
      */
-    getUSSDWithCallback(configFile:string, ussdCommand:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>;
+    getUSSDWithCallback(ussdCommand:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>;
 }
