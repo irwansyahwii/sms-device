@@ -1,6 +1,6 @@
 {
   "name": "sms-device",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A library that provides an abstraction to send/receive sms through a modem. This library also provided an implementation that using gammu command line to communicate with the modem.",
   "main": "index.js",
   "engines": {

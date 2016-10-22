@@ -14,7 +14,7 @@ import {WavecomModemDriver} from './wavecom/WavecomModemDriver';
 import {IUSSDResponseParser} from './IUSSDResponseParser';
 import {WavecomUSSDResponseParser} from './wavecom/WavecomUSSDResponseParser';
 import {USSDResponse} from './USSDResponse';
-
+import {RawModem} from 'raw-modem';
 
 /**
  * Provide a default implementation for ISmsDevice
@@ -27,7 +27,7 @@ export class SmsDevice implements ISmsDevice{
         private modemDriver: IModemDriver, 
         private identifyMetadataParser:IIdentifyMetadataParser,
         private smsMetadataParser: ISmsMetadataParser,
-        private ussdResponseParser: IUSSDResponseParser ){
+        public ussdResponseParser: IUSSDResponseParser ){
 
     }
 
@@ -164,5 +164,23 @@ export class SmsDevice implements ISmsDevice{
                     })
             }            
         })
+    }
+
+    getUSSDWithCallback(configFile:string, ussdCode:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>{
+        return Rx.Observable.create(s =>{
+            if(this._configFilePath.length <= 0){
+                s.error(new Error('getUSSD failed. No config file specified.'));
+            }
+            else{
+                this.modemDriver.getUSSDWithCallback(this._configFilePath, ussdCode, callback)
+                    .subscribe(r => {
+                        s.next(r);
+                    }, err =>{
+                        s.error(err);
+                    }, ()=>{
+                        s.complete();
+                    })
+            }            
+        })        
     }
 }

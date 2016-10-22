@@ -2,6 +2,7 @@ import Rx = require('rxjs/Rx');
 import {SmsDeviceInfo} from './SmsDeviceInfo';
 import {SmsInfo} from './SmsInfo';
 import {USSDResponse} from './USSDResponse';
+import {RawModem} from 'raw-modem';
 
 /**
  * Defined a set of operations for an Sms device.
@@ -53,4 +54,16 @@ export interface ISmsDevice{
      * @return {Rx.Observable<USSDResponse>} - An Observable containing the USSD response
      */
     getUSSD(ussdCode:string): Rx.Observable<USSDResponse>;
+
+    /**
+     * Send USSD command to the modem and wait until the callback finish then close the modem
+     * 
+     * @param {string} configFile
+     * @param {string} ussdCommand
+     * @param {(modem:RawModem, responseString:string) => Rx.Observable<string>} callback
+     * @returns {Rx.Observable<string>}
+     * 
+     * @memberOf ISmsDevice
+     */
+    getUSSDWithCallback(configFile:string, ussdCommand:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>;
 }
