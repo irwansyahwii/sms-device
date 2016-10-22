@@ -180,7 +180,7 @@ SIM IMSI             : ${result.sim_imsi}
         })    
     }    
 
-    getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+    getUSSDWithCallback(configFile:string, ussdCommand:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>{
         return Rx.Observable.create(s =>{
             let serialPort = new DefaultSerialPort();
 
@@ -209,13 +209,20 @@ SIM IMSI             : ${result.sim_imsi}
                     });
                 })
                 .flatMap((response) => {
-                    s.next(response);                                        
-                    return modem.close()
+                    return callback(modem, response);
                 })                                
                 .subscribe(r =>{
+                    s.next(r);
                 }, err => s.error(err), ()=>{
                     s.complete();
                 }) 
+        })        
+    }
+
+    getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>{
+        return this.getUSSDWithCallback(configFile, ussdCommand, (modem:RawModem, responseString:string) => {
+            return modem.close()
+                .flatMap(() => Rx.Observable.from([responseString]));
         })
     }
 }

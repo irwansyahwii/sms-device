@@ -128,7 +128,7 @@ describe('SmsDevice', function(){
 
             let isModemDriverIdentifyCalled = false;
 
-            let modemDriver: IModemDriver = {
+            let modemDriver: any = {
                 identify: function(configFIle:string): Rx.Observable<string>{
                     return Rx.Observable.create(s =>{
                         assert.equal(configFIle, 'config1.rc');
@@ -194,7 +194,7 @@ describe('SmsDevice', function(){
 
             let isModemDriverIdentifyCalled = false;
 
-            let modemDriver: IModemDriver = {
+            let modemDriver: any = {
                 identify: function(configFIle:string): Rx.Observable<string>{
                     return Rx.Observable.create(s =>{
                         s.next('info1');
@@ -286,7 +286,7 @@ describe('SmsDevice', function(){
 
             let isModemDriverReadAllSmsCalled = false;
 
-            let modemDriver: IModemDriver = {
+            let modemDriver: any = {
                 identify: function(configFIle:string): Rx.Observable<string>{
                     return Rx.Observable.create(s =>{
                         s.next('info1');
@@ -360,7 +360,7 @@ describe('SmsDevice', function(){
 
             let isSmsMetadataParseCalled = false;
 
-            let modemDriver: IModemDriver = {
+            let modemDriver: any = {
                 identify: function(configFIle:string): Rx.Observable<string>{
                     return Rx.Observable.create(s =>{
                         s.next('info1');
@@ -455,7 +455,7 @@ describe('SmsDevice', function(){
 
             let isModemDriverDeleteAllSmsCalled = false;
 
-            let modemDriver: IModemDriver = {
+            let modemDriver: any = {
                 identify: function(configFIle:string): Rx.Observable<string>{
                     return Rx.Observable.create(s =>{
                         s.next('info1');
@@ -555,7 +555,7 @@ describe('SmsDevice', function(){
 
             let isModemDriverSendSmsCalled = false;
 
-            let modemDriver: IModemDriver = {
+            let modemDriver: any = {
                 identify: function(configFIle:string): Rx.Observable<string>{
                     return Rx.Observable.create(s =>{
                         s.next('info1');

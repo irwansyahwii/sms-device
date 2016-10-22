@@ -1,4 +1,5 @@
 import Rx = require('rxjs/Rx');
+import {RawModem} from 'raw-modem';
 
 /**
  * Defined the operations to communicate with the GSM modem
@@ -48,4 +49,14 @@ export interface IModemDriver{
      * @return {Rx.Observable<string>} An Observable containing the response string
      */
     getUSSD(configFile:string, ussdCommand:string):Rx.Observable<string>;
+
+    /**
+     * Send a USSD command to the modem but call the callback instead of immediately closing the modem
+     * 
+     * @param {string} ussdCommand - The USSD code
+     * 
+     * @return {Rx.Observable<string>} An Observable containing the response string
+     */
+    getUSSDWithCallback(configFile:string, ussdCommand:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>;
+ 
 }

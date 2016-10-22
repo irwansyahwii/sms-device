@@ -1,5 +1,6 @@
 import {IModemDriver} from '../IModemDriver';
 import Rx = require('rxjs/Rx');
+import {RawModem} from 'raw-modem';
 
 declare let require:any;
 const spawn = require('child_process').spawn;
@@ -130,6 +131,11 @@ export class GammuModemDriver implements IModemDriver{
                 s.complete();
             });
         });
+    }
+
+    getUSSDWithCallback(configFile:string, ussdCommand:string, callback:(modem:RawModem, responseString:string) => Rx.Observable<string>):Rx.Observable<string>{
+        return this.getUSSD(configFile, ussdCommand)
+                    .flatMap((response) => callback(null, response));
     }
     
 }
