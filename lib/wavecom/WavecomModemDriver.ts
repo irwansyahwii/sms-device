@@ -45,9 +45,12 @@ SIM IMSI             : ${result.sim_imsi}
 
                 return resultString;
             }
-            
+            let isModemOpened = false;
             modem.open(modemOptions)
-                .flatMap(() => modem.send('AT+CGMM\r'))
+                .flatMap(() => {
+                    isModemOpened = true;
+                    return modem.send('AT+CGMM\r')
+                })
                 .flatMap((response)=>{
                     let responseTrimmed = response.trim().replace('AT+CGMM', '');
                     result.model = responseTrimmed.trim();
@@ -74,7 +77,11 @@ SIM IMSI             : ${result.sim_imsi}
 
                     return response;
                 })           
-                .finally(()=> modem.close())
+                .finally(()=> {
+                    if(isModemOpened){
+                        modem.close().subscribe(()=>{});
+                    }
+                })                                                                      
                 .subscribe(response =>{
                     
                     let resultString = resultToString(result);
@@ -94,12 +101,20 @@ SIM IMSI             : ${result.sim_imsi}
 
             let modem = new RawModem(serialPort);
             
+            let isModemOpened = false;
             modem.open(modemOptions)
-                .flatMap(() => modem.send('AT+CMGF=1\r'))
+                .flatMap(() => {
+                    isModemOpened = true;
+                    return modem.send('AT+CMGF=1\r');
+                })
                 .flatMap((response)=>{
                     return modem.send('AT+CMGL="ALL"\r')
                 })
-                .finally(()=> modem.close())                
+                .finally(()=> {
+                    if(isModemOpened){
+                        modem.close().subscribe(()=>{});
+                    }
+                })                                                                      
                 .subscribe(response =>{
                     s.next(response);
                     
@@ -115,9 +130,10 @@ SIM IMSI             : ${result.sim_imsi}
             let modemOptions = this._getModemOptions(configFile);
 
             let modem = new RawModem(serialPort);
-
+            let isModemOpened = false;
             modem.open(modemOptions)
                 .flatMap(() => {
+                    isModemOpened = true;
                     return Rx.Observable.range(startLocation, (endLocation - startLocation) + 1);
                 })
                 .flatMap((messageIndex) =>{
@@ -127,7 +143,11 @@ SIM IMSI             : ${result.sim_imsi}
                 .skipWhile((value, index) =>{
                     return index !== (endLocation - startLocation);
                 })
-                .finally(()=> modem.close())                                
+                .finally(()=> {
+                    if(isModemOpened){
+                        modem.close().subscribe(()=>{});
+                    }
+                })                                                                      
                 .subscribe(response =>{
                     s.next();                    
                 }, err => s.error(err), () => s.complete())            
@@ -142,9 +162,12 @@ SIM IMSI             : ${result.sim_imsi}
             let modemOptions = this._getModemOptions(configFile);
 
             let modem = new RawModem(serialPort);
-            
+            let isModemOpened = false;
             modem.open(modemOptions)
-                .flatMap(() => modem.send('AT+CSCS="GSM"\r'))
+                .flatMap(() => {
+                    isModemOpened = true;
+                    return modem.send('AT+CSCS="GSM"\r')
+                })
                 .flatMap(() => modem.send('AT+CSMP=1,173,0,7\r'))
                 .flatMap(() => modem.send('AT+CMGF=1\r'))
                 .flatMap(response =>{
@@ -161,7 +184,11 @@ SIM IMSI             : ${result.sim_imsi}
                 .flatMap(response =>{
                     return modem.send(`${message}\x1A\r`)
                 })                         
-                .finally(()=> modem.close())                                                
+                .finally(()=> {
+                    if(isModemOpened){
+                        modem.close().subscribe(()=>{});
+                    }
+                })                                                                      
                 .subscribe(response =>{
                     s.next();
                 }, 
@@ -178,9 +205,10 @@ SIM IMSI             : ${result.sim_imsi}
             modemOptions.commandTimeout = 8000;
 
             let modem = new RawModem(serialPort);
+            let isModemOpened = false;
             modem.open(modemOptions)
                 .flatMap(()=>{
-                    
+                    isModemOpened = true;
                     let completeString = '';
                     return modem.send(`AT+CUSD=1,"${ussdCommand}"\r`, (buffer:any, subscriber: Rx.Subscriber<string>) =>{
                         completeString += buffer.toString();
@@ -201,7 +229,11 @@ SIM IMSI             : ${result.sim_imsi}
                 .flatMap((response) => {
                     return callback(modem, response);
                 })                          
-                .finally(()=> modem.close())                                                                      
+                .finally(()=> {
+                    if(isModemOpened){
+                        modem.close().subscribe(()=>{});
+                    }
+                })                                                                      
                 .subscribe(r =>{
                     s.next(r);
                 }, err => s.error(err), ()=>{
