@@ -68,11 +68,13 @@ SIM IMSI             : ${result.sim_imsi}
                     result.imei = responseTrimmed.trim();
                     return modem.send('AT+CIMI\r')
                 })                
-                .flatMap((response)=>{
+                .map((response)=>{
                     let responseTrimmed = response.trim().replace('AT+CIMI', '');
                     result.sim_imsi = responseTrimmed.trim();
-                    return modem.close();
-                })                
+
+                    return response;
+                })           
+                .finally(()=> modem.close())
                 .subscribe(response =>{
                     
                     let resultString = resultToString(result);
@@ -97,12 +99,9 @@ SIM IMSI             : ${result.sim_imsi}
                 .flatMap((response)=>{
                     return modem.send('AT+CMGL="ALL"\r')
                 })
-                .flatMap((response) => {
-                    s.next(response);
-
-                    return modem.close()
-                })
+                .finally(()=> modem.close())                
                 .subscribe(response =>{
+                    s.next(response);
                     
                 }, err => s.error(err), () => s.complete())
         })    
@@ -128,14 +127,9 @@ SIM IMSI             : ${result.sim_imsi}
                 .skipWhile((value, index) =>{
                     return index !== (endLocation - startLocation);
                 })
-                .flatMap(() => {
-                    console.log('all finished closing modem');
-                    s.next();
-
-                    return modem.close()
-                })
+                .finally(()=> modem.close())                                
                 .subscribe(response =>{
-                    
+                    s.next();                    
                 }, err => s.error(err), () => s.complete())            
         })    
     }
@@ -167,13 +161,9 @@ SIM IMSI             : ${result.sim_imsi}
                 .flatMap(response =>{
                     return modem.send(`${message}\x1A\r`)
                 })                         
-                .flatMap((response) => {
-                    s.next();
-                    
-                    return modem.close()
-                })                
+                .finally(()=> modem.close())                                                
                 .subscribe(response =>{
-
+                    s.next();
                 }, 
                 err => s.error(err), 
                 () => s.complete());
@@ -210,7 +200,8 @@ SIM IMSI             : ${result.sim_imsi}
                 })
                 .flatMap((response) => {
                     return callback(modem, response);
-                })                                
+                })                          
+                .finally(()=> modem.close())                                                                      
                 .subscribe(r =>{
                     s.next(r);
                 }, err => s.error(err), ()=>{
